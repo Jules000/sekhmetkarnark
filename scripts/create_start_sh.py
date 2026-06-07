@@ -10,7 +10,7 @@ content = (
     "#!/bin/bash\n"
     "set -e\n"
     "\n"
-    'PORT="${PORT:-${RAILWAY_TCP_APPLICATION_PORT:-8000}}"\n'
+    "PORT=8000\n"
     'echo "Starting gunicorn on port $PORT..."\n'
     "\n"
     "python manage.py migrate --noinput --settings=config.settings.production\n"
