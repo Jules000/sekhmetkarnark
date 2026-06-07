@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-PORT=8000
+PORT="${PORT:-8000}"
 echo "Starting gunicorn on port $PORT..."
 
 python manage.py migrate --noinput --settings=config.settings.production
