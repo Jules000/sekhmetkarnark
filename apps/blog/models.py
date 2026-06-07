@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
@@ -35,7 +36,7 @@ class Article(models.Model):
     excerpt = models.TextField(max_length=500, blank=True)
     content = models.TextField()
     author = models.ForeignKey(
-        "auth.User", on_delete=models.SET_NULL, null=True, related_name="articles"
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name="articles"
     )
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=True

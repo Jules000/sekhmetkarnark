@@ -1,107 +1,29 @@
 /* ============================================================
    Fonts Locales — SekhmetKarnark
-   Téléchargées depuis Google Fonts, servies localement
+   Servies localement depuis Google Fonts (woff2)
    ============================================================ */
 
+/* Jost — UI labels, navigation */
+@font-face { font-family: 'Jost'; font-style: normal; font-weight: 300; src: url('../fonts/jost-92zatBhPNqw73oTd4g.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; }
+@font-face { font-family: 'Jost'; font-style: normal; font-weight: 400; src: url('../fonts/jost-92zatBhPNqw73oDd4iYl.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; }
+@font-face { font-family: 'Jost'; font-style: normal; font-weight: 500; src: url('../fonts/jost-92zatBhPNqw73ord4iYl.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; }
+@font-face { font-family: 'Jost'; font-style: normal; font-weight: 400; src: url('../fonts/jost-92zPtBhPNqw79Ij1E865zBUv7myjJTVFNIg8mg.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; font-display: swap; }
+@font-face { font-family: 'Jost'; font-style: normal; font-weight: 400; src: url('../fonts/jost-92zPtBhPNqw79Ij1E865zBUv7myjJTVPNIg8mg.woff2') format('woff2'); unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; font-display: swap; }
+@font-face { font-family: 'Jost'; font-style: normal; font-weight: 400; src: url('../fonts/jost-92zPtBhPNqw79Ij1E865zBUv7myjJTVBNIg.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; }
+
 /* Libre Caslon Text — Display titles */
-@font-face {
-    font-family: 'Libre Caslon Text';
-    src: url('../fonts/libre-caslon-text-400.woff2') format('woff2'),
-         url('../fonts/libre-caslon-text-400.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Libre Caslon Text';
-    src: url('../fonts/libre-caslon-text-400italic.woff2') format('woff2'),
-         url('../fonts/libre-caslon-text-400italic.woff') format('woff');
-    font-weight: 400;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Libre Caslon Text';
-    src: url('../fonts/libre-caslon-text-700.woff2') format('woff2'),
-         url('../fonts/libre-caslon-text-700.woff') format('woff');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
+@font-face { font-family: 'Libre Caslon Text'; font-style: normal; font-weight: 400; src: url('../fonts/librecaslontext-DdT678IGsGw1aF1JU10PUbTvNNaDMfq95-BDGg.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; }
+@font-face { font-family: 'Libre Caslon Text'; font-style: normal; font-weight: 400; src: url('../fonts/librecaslontext-DdT878IGsGw1aF1JU10PUbTvNNaDMfq41-I.woff2') format('woff2'); unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; font-display: swap; }
+@font-face { font-family: 'Libre Caslon Text'; font-style: normal; font-weight: 700; src: url('../fonts/librecaslontext-DdT578IGsGw1aF1JU10PUbTvNNaDMfID8vdkPx4.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; }
+@font-face { font-family: 'Libre Caslon Text'; font-style: italic; font-weight: 400; src: url('../fonts/librecaslontext-DdT878IGsGw1aF1JU10PUbTvNNaDMfq21-JbHg.woff2') format('woff2'); unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; font-display: swap; }
+@font-face { font-family: 'Libre Caslon Text'; font-style: italic; font-weight: 400; src: url('../fonts/librecaslontext-DdT678IGsGw1aF1JU10PUbTvNNaDMfq95-5DGiO1.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; }
 
 /* Literata — Body text */
-@font-face {
-    font-family: 'Literata';
-    src: url('../fonts/literata-400.woff2') format('woff2'),
-         url('../fonts/literata-400.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Literata';
-    src: url('../fonts/literata-400italic.woff2') format('woff2'),
-         url('../fonts/literata-400italic.woff') format('woff');
-    font-weight: 400;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Literata';
-    src: url('../fonts/literata-700.woff2') format('woff2'),
-         url('../fonts/literata-700.woff') format('woff');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
-
-/* Jost — UI labels, navigation */
-@font-face {
-    font-family: 'Jost';
-    src: url('../fonts/jost-300.woff2') format('woff2'),
-         url('../fonts/jost-300.woff') format('woff');
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Jost';
-    src: url('../fonts/jost-400.woff2') format('woff2'),
-         url('../fonts/jost-400.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Jost';
-    src: url('../fonts/jost-500.woff2') format('woff2'),
-         url('../fonts/jost-500.woff') format('woff');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
+@font-face { font-family: 'Literata'; font-style: normal; font-weight: 400; src: url('../fonts/literata-or3yQ6P12-iJxAIgLYT1PLs1a-t7PU0AbeE9KK5U5Ck.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; }
+@font-face { font-family: 'Literata'; font-style: normal; font-weight: 700; src: url('../fonts/literata-or3PQ6P12-iJxAIgLa78DkTtAoDhk0oVpaK3YLanFLHpPf2TbLi4J_HWTA.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; }
 
 /* Cormorant Garamond — Logo */
-@font-face {
-    font-family: 'Cormorant Garamond';
-    src: url('../fonts/cormorant-garamond-300.woff2') format('woff2'),
-         url('../fonts/cormorant-garamond-300.woff') format('woff');
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
-}
+@font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 300; src: url('../fonts/cormorantgaramond-co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_qE6KnTOig.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; }
 
 /* Material Symbols Outlined — Icons */
-@font-face {
-    font-family: 'Material Symbols Outlined';
-    src: url('../fonts/material-symbols-outlined.woff2') format('woff2');
-    font-weight: 100 700;
-    font-style: normal;
-    font-display: block;
-}
+@font-face { font-family: 'Material Symbols Outlined'; font-style: normal; font-weight: 400; src: url('../fonts/materialsymbolsoutlined-kJF1BvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzByHX9rA6RzaxHMPdY43zj-jCxv3fzvRNU22ZXGJpEpjC_1v-p_4MrImHCIJIZrDCvHOej.woff2') format('woff2'); font-display: block; }

@@ -1,78 +1,69 @@
 """
-Script de téléchargement des Google Fonts pour SekhmetKarnark.
-Utilise l'API google-webfonts-helper (https://gwfh.mranftl.com/api/fonts)
-pour obtenir les URLs de téléchargement woff2/woff.
-
+Télécharge les Google Fonts pour SekhmetKarnark depuis Google Fonts API CSS2.
 Usage: python scripts/download_fonts.py
-
-Les fichiers seront placés dans static/fonts/
 """
 
-import json
+import re
 import urllib.request
-import urllib.error
 from pathlib import Path
 
 FONTS_DIR = Path(__file__).resolve().parent.parent / "static" / "fonts"
 FONTS_DIR.mkdir(parents=True, exist_ok=True)
 
-FONTS = [
-    {
-        "family": "Libre Caslon Text",
-        "variants": ["400", "400italic", "700"],
-    },
-    {
-        "family": "Literata",
-        "variants": ["400", "400italic", "700"],
-    },
-    {
-        "family": "Jost",
-        "variants": ["300", "400", "500"],
-    },
-    {
-        "family": "Cormorant Garamond",
-        "variants": ["300"],
-    },
-]
+FONTS_CSS_URL = (
+    "https://fonts.googleapis.com/css2?"
+    "family=Jost:wght@300;400;500&"
+    "family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&"
+    "family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,700;1,7..72,400&"
+    "family=Cormorant+Garamond:wght@300&"
+    "family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&"
+    "display=swap"
+)
 
-BASE_URL = "https://gwfh.mranftl.com/api/fonts/{family}?download=zip&formats=woff,woff2"
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/120.0.0.0 Safari/537.36"
+)
 
 
-def download_font(family, variant):
-    """Télécharge un fichier de police via google-webfonts-helper."""
-    url = BASE_URL.format(family=family.replace(" ", "-").lower())
-    filename = f"{family.lower().replace(' ', '-')}-{variant}.woff2"
-    filepath = FONTS_DIR / filename
-
-    if filepath.exists():
-        print(f"  ✓ Déjà présent : {filename}")
-        return
-
-    try:
-        print(f"  → Téléchargement : {filename}")
-        # Note: l'API gwfh nécessite d'être appelée avec le subset et variant
-        # L'implémentation complète nécessite une requête par variante
-        print(f"  ✗ À télécharger manuellement depuis https://gwfh.mranftl.com/fonts/{family.replace(' ', '-').lower()}")
-    except Exception as e:
-        print(f"  ✗ Erreur : {e}")
+def download_file(url, dest):
+    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    with urllib.request.urlopen(req) as r:
+        data = r.read()
+    dest.write_bytes(data)
+    return len(data)
 
 
 def main():
-    print("=== Téléchargement des polices Google Fonts ===")
-    print(f"Dossier de destination : {FONTS_DIR}\n")
+    print("=== Téléchargement des polices Google Fonts ===\n")
 
-    for font in FONTS:
-        family = font["family"]
-        print(f"\nFamille : {family}")
-        for variant in font["variants"]:
-            download_font(family, variant)
+    req = urllib.request.Request(FONTS_CSS_URL, headers={"User-Agent": USER_AGENT})
+    with urllib.request.urlopen(req) as r:
+        css_content = r.read().decode("utf-8")
 
-    print("\n=== Terminé ===")
-    print("\nPour télécharger automatiquement les fonts, utilisez :")
-    print("  1. Rendez-vous sur https://gwfh.mranftl.com/")
-    print("  2. Recherchez chaque famille de police")
-    print("  3. Sélectionnez les subsets 'latin' et les variants listés ci-dessus")
-    print("  4. Téléchargez le zip et extrayez les fichiers .woff2 et .woff dans static/fonts/")
+    urls = re.findall(r"url\((https://[^)]+)\)", css_content)
+    print(f"  Trouvé {len(urls)} fichiers font\n")
+
+    for url in urls:
+        woff2_match = re.search(r"/([^/]+\.woff2)", url)
+        if woff2_match:
+            filename = woff2_match.group(1)
+        else:
+            filename = url.split("/")[-1].split("?")[0]
+
+        dest = FONTS_DIR / filename
+        if dest.exists():
+            print(f"  ✓ Déjà présent : {filename}")
+            continue
+
+        try:
+            size = download_file(url, dest)
+            print(f"  ✓ Téléchargé : {filename} ({size // 1024} KB)")
+        except Exception as e:
+            print(f"  ✗ Échec : {filename} — {e}")
+
+    print(f"\n✓ Terminé ! {len(urls)} fichiers dans {FONTS_DIR}")
 
 
 if __name__ == "__main__":
