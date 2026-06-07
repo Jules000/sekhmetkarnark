@@ -1,0 +1,107 @@
+/* ============================================================
+   Fonts Locales — SekhmetKarnark
+   Téléchargées depuis Google Fonts, servies localement
+   ============================================================ */
+
+/* Libre Caslon Text — Display titles */
+@font-face {
+    font-family: 'Libre Caslon Text';
+    src: url('../fonts/libre-caslon-text-400.woff2') format('woff2'),
+         url('../fonts/libre-caslon-text-400.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Libre Caslon Text';
+    src: url('../fonts/libre-caslon-text-400italic.woff2') format('woff2'),
+         url('../fonts/libre-caslon-text-400italic.woff') format('woff');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Libre Caslon Text';
+    src: url('../fonts/libre-caslon-text-700.woff2') format('woff2'),
+         url('../fonts/libre-caslon-text-700.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Literata — Body text */
+@font-face {
+    font-family: 'Literata';
+    src: url('../fonts/literata-400.woff2') format('woff2'),
+         url('../fonts/literata-400.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Literata';
+    src: url('../fonts/literata-400italic.woff2') format('woff2'),
+         url('../fonts/literata-400italic.woff') format('woff');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Literata';
+    src: url('../fonts/literata-700.woff2') format('woff2'),
+         url('../fonts/literata-700.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Jost — UI labels, navigation */
+@font-face {
+    font-family: 'Jost';
+    src: url('../fonts/jost-300.woff2') format('woff2'),
+         url('../fonts/jost-300.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Jost';
+    src: url('../fonts/jost-400.woff2') format('woff2'),
+         url('../fonts/jost-400.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Jost';
+    src: url('../fonts/jost-500.woff2') format('woff2'),
+         url('../fonts/jost-500.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Cormorant Garamond — Logo */
+@font-face {
+    font-family: 'Cormorant Garamond';
+    src: url('../fonts/cormorant-garamond-300.woff2') format('woff2'),
+         url('../fonts/cormorant-garamond-300.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Material Symbols Outlined — Icons */
+@font-face {
+    font-family: 'Material Symbols Outlined';
+    src: url('../fonts/material-symbols-outlined.woff2') format('woff2');
+    font-weight: 100 700;
+    font-style: normal;
+    font-display: block;
+}

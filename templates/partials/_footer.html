@@ -1,0 +1,20 @@
+{% load static i18n %}
+<footer class="w-full py-section-padding px-margin-desktop flex flex-col items-center gap-unit max-w-container-max mx-auto border-t-[0.5px] border-outline-variant flat no shadows bg-surface-container dark:bg-surface-container-highest">
+    <div class="mb-12">
+        <a href="{% url 'home' %}">
+            <img src="{% static 'icons/sekhmetkarnark-logo.svg' %}" alt="SekhmetKarnark Logo" class="h-16 w-auto opacity-80 mix-blend-multiply">
+        </a>
+    </div>
+    <nav class="flex flex-wrap justify-center gap-x-12 gap-y-4 mb-16">
+        <a href="{% url 'newsletter:subscribe' %}" class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-body-md text-body-md font-label-caps focus:underline">{% trans "Newsletter" %}</a>
+        <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-body-md text-body-md font-label-caps focus:underline">{% trans "Mentions Légales" %}</a>
+        <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-body-md text-body-md font-label-caps focus:underline">{% trans "CGV" %}</a>
+        <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-body-md text-body-md font-label-caps focus:underline">{% trans "Confidentialité" %}</a>
+        <a href="#" class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-body-md text-body-md font-label-caps focus:underline">{% trans "Presse" %}</a>
+    </nav>
+    <div class="text-center">
+        <p class="text-on-surface-variant font-body-md text-body-md font-label-caps text-sm opacity-70">
+            &copy; {% now "Y" %} SekhmetKarnark. {% trans "Sagesse Ancienne, Science Moderne." %}
+        </p>
+    </div>
+</footer>

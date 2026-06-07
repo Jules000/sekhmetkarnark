@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Finaliser la commande" %} - SekhmetKarnark{% endblock %}
+
+{% block content %}
+<main class="pt-32 pb-section-padding">
+    <div class="max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop">
+        <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-12 text-center">{% trans "Finaliser la commande" %}</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+            <div>
+                <h2 class="font-headline-sm text-headline-sm text-primary mb-8">{% trans "Informations de livraison" %}</h2>
+                <form class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="relative group">
+                            <input class="block w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-on-surface font-body-md focus:ring-0 focus:border-primary peer placeholder-transparent" id="first_name" name="first_name" placeholder=" " required type="text">
+                            <label class="absolute left-0 top-3 text-on-surface-variant font-ui-label transition-all peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-label-caps peer-focus:text-primary" for="first_name">{% trans "Prénom" %}</label>
+                        </div>
+                        <div class="relative group">
+                            <input class="block w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-on-surface font-body-md focus:ring-0 focus:border-primary peer placeholder-transparent" id="last_name" name="last_name" placeholder=" " required type="text">
+                            <label class="absolute left-0 top-3 text-on-surface-variant font-ui-label transition-all peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-label-caps peer-focus:text-primary" for="last_name">{% trans "Nom" %}</label>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <input class="block w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-on-surface font-body-md focus:ring-0 focus:border-primary peer placeholder-transparent" id="email" name="email" placeholder=" " required type="email">
+                        <label class="absolute left-0 top-3 text-on-surface-variant font-ui-label transition-all peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-label-caps peer-focus:text-primary" for="email">{% trans "Email" %}</label>
+                    </div>
+                    <div class="relative group">
+                        <input class="block w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-on-surface font-body-md focus:ring-0 focus:border-primary peer placeholder-transparent" id="address" name="address" placeholder=" " required type="text">
+                        <label class="absolute left-0 top-3 text-on-surface-variant font-ui-label transition-all peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-label-caps peer-focus:text-primary" for="address">{% trans "Adresse" %}</label>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="relative group">
+                            <input class="block w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-on-surface font-body-md focus:ring-0 focus:border-primary peer placeholder-transparent" id="city" name="city" placeholder=" " required type="text">
+                            <label class="absolute left-0 top-3 text-on-surface-variant font-ui-label transition-all peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-label-caps peer-focus:text-primary" for="city">{% trans "Ville" %}</label>
+                        </div>
+                        <div class="relative group">
+                            <input class="block w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-on-surface font-body-md focus:ring-0 focus:border-primary peer placeholder-transparent" id="postal_code" name="postal_code" placeholder=" " required type="text">
+                            <label class="absolute left-0 top-3 text-on-surface-variant font-ui-label transition-all peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-label-caps peer-focus:text-primary" for="postal_code">{% trans "Code postal" %}</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div>
+                <h2 class="font-headline-sm text-headline-sm text-primary mb-8">{% trans "Récapitulatif" %}</h2>
+                <div class="bg-surface-container-low p-8 rounded-lg space-y-4">
+                    <div class="flex justify-between font-ui-label text-ui-label">
+                        <span>{% trans "Sous-total" %}</span>
+                        <span>0,00 €</span>
+                    </div>
+                    <div class="flex justify-between font-ui-label text-ui-label">
+                        <span>{% trans "Livraison" %}</span>
+                        <span>{% trans "Calculée à l'étape suivante" %}</span>
+                    </div>
+                    <div class="border-t border-outline-variant pt-4 flex justify-between font-headline-sm text-headline-sm">
+                        <span>{% trans "Total" %}</span>
+                        <span>0,00 €</span>
+                    </div>
+                </div>
+                <button class="w-full mt-8 bg-primary text-on-primary font-label-caps text-label-caps py-4 uppercase tracking-widest hover:bg-surface-tint transition-colors">
+                    {% trans "Payer" %}
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Le Journal de la Santé Naturelle" %} - SekhmetKarnark{% endblock %}
+
+{% block body_class %}antialiased font-body-md text-body-md selection:bg-primary-container selection:text-on-primary-container{% endblock %}
+
+{% block header %}
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-6 max-w-container-max mx-auto bg-surface/90 backdrop-blur-md transition-all duration-500 border-b-[0.5px] border-outline-variant/30 shadow-sm">
+    <a class="font-display-lg text-headline-sm text-primary dark:text-primary-fixed tracking-tight" href="{% url 'home' %}">SekhmetKarnark</a>
+    <div class="hidden md:flex items-center gap-8">
+        <a href="{% url 'home' %}" class="text-on-surface-variant hover:text-secondary-container transition-colors duration-300 font-ui-label text-ui-label text-label-caps">{% trans "Accueil" %}</a>
+        <a aria-current="page" class="text-primary font-bold border-b-2 border-primary pb-1 font-ui-label text-ui-label text-label-caps" href="{% url 'blog:article_list' %}">{% trans "Blog" %}</a>
+        <a href="{% url 'shop:product_list' %}" class="text-on-surface-variant hover:text-secondary-container transition-colors duration-300 font-ui-label text-ui-label text-label-caps">{% trans "Boutique" %}</a>
+        <a href="{% url 'about' %}" class="text-on-surface-variant hover:text-secondary-container transition-colors duration-300 font-ui-label text-ui-label text-label-caps">{% trans "À propos" %}</a>
+        <a href="{% url 'contact:contact' %}" class="text-on-surface-variant hover:text-secondary-container transition-colors duration-300 font-ui-label text-ui-label text-label-caps">{% trans "Contact" %}</a>
+    </div>
+    <div class="flex items-center gap-4 text-primary dark:text-primary-fixed">
+        <button class="hover:opacity-80 scale-95 transition-all"><span class="material-symbols-outlined" data-icon="language">language</span></button>
+        <a href="{% url 'accounts:login' %}" class="hover:opacity-80 scale-95 transition-all"><span class="material-symbols-outlined" data-icon="person">person</span></a>
+        <a href="{% url 'cart:cart_detail' %}" class="hover:opacity-80 scale-95 transition-all"><span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span></a>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<main class="pt-[140px] pb-section-padding">
+    <header class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto text-center mb-16">
+        <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-6">{% trans "Le Journal de la Santé Naturelle" %}</h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">{% trans "Sagesse ancienne, science moderne. Explorez nos articles, protocoles et réflexions pour une vitalité retrouvée." %}</p>
+    </header>
+
+    <section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto mb-16 border-b-[0.5px] border-outline-variant/50 pb-8 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+        <div class="flex flex-wrap gap-3">
+            <span class="font-label-caps text-label-caps text-on-surface-variant py-2">{% trans "Filtres :" %}</span>
+            <button class="px-4 py-2 rounded-full border-[0.5px] border-primary text-primary font-ui-label text-ui-label bg-primary/5 hover:bg-primary/10 transition-colors">{% trans "Tous" %}</button>
+            <button class="px-4 py-2 rounded-full border-[0.5px] border-outline-variant text-on-surface-variant font-ui-label text-ui-label hover:border-primary transition-colors">{% trans "Immunité" %}</button>
+            <button class="px-4 py-2 rounded-full border-[0.5px] border-outline-variant text-on-surface-variant font-ui-label text-ui-label hover:border-primary transition-colors">{% trans "Digestion" %}</button>
+            <button class="px-4 py-2 rounded-full border-[0.5px] border-outline-variant text-on-surface-variant font-ui-label text-ui-label hover:border-primary transition-colors">{% trans "Système Nerveux" %}</button>
+        </div>
+        <div class="flex gap-4 items-center">
+            <span class="font-label-caps text-label-caps text-on-surface-variant">{% trans "Trier par :" %}</span>
+            <select class="bg-transparent border-none text-primary font-ui-label text-ui-label cursor-pointer focus:ring-0 p-0">
+                <option>{% trans "Plus récents" %}</option>
+                <option>{% trans "Temps de lecture" %}</option>
+            </select>
+        </div>
+    </section>
+
+    <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+        <div class="lg:col-span-8 flex flex-col gap-16">
+            {% for article in featured_articles %}
+            <article class="group cursor-pointer">
+                <div class="w-full h-[400px] overflow-hidden rounded-DEFAULT bg-surface-container mb-6 relative">
+                    {% if article.featured_image %}
+                    <img src="{{ article.featured_image.url }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    {% else %}
+                    <div class="w-full h-full bg-surface-container flex items-center justify-center">
+                        <span class="material-symbols-outlined text-6xl text-outline-variant">spa</span>
+                    </div>
+                    {% endif %}
+                    {% if article.category %}
+                    <div class="absolute top-4 left-4 bg-surface/90 backdrop-blur-sm px-3 py-1 rounded-DEFAULT font-label-caps text-label-caps text-primary uppercase">{{ article.category }}</div>
+                    {% endif %}
+                </div>
+                <div class="flex items-center gap-4 text-on-surface-variant font-ui-label text-ui-label mb-3">
+                    <span>{% trans "Par" %} {{ article.author.get_full_name|default:article.author.username }}</span>
+                    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+                    <span>{{ article.reading_time }} min {% trans "de lecture" %}</span>
+                </div>
+                <h2 class="font-headline-md text-headline-md text-primary mb-4 group-hover:text-surface-tint transition-colors">{{ article.title }}</h2>
+                <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">{{ article.excerpt }}</p>
+            </article>
+            {% empty %}
+            <article class="group cursor-pointer">
+                <div class="w-full h-[400px] overflow-hidden rounded-DEFAULT bg-surface-container mb-6 relative">
+                    <div class="w-full h-full bg-surface-container flex items-center justify-center">
+                        <span class="material-symbols-outlined text-6xl text-outline-variant">spa</span>
+                    </div>
+                    <div class="absolute top-4 left-4 bg-surface/90 backdrop-blur-sm px-3 py-1 rounded-DEFAULT font-label-caps text-label-caps text-primary uppercase">{% trans "Phytothérapie" %}</div>
+                </div>
+                <div class="flex items-center gap-4 text-on-surface-variant font-ui-label text-ui-label mb-3">
+                    <span>{% trans "Par Dr. E. Dubois" %}</span>
+                    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+                    <span>8 min {% trans "de lecture" %}</span>
+                </div>
+                <h2 class="font-headline-md text-headline-md text-primary mb-4 group-hover:text-surface-tint transition-colors">{% trans "Le Pouvoir Adaptogène de l'Ashwagandha face au Stress Chronique" %}</h2>
+                <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">{% trans "Une analyse clinique détaillée de l'impact des plantes adaptogènes sur l'axe HPA et la régulation du cortisol en naturopathie moderne." %}</p>
+            </article>
+            {% endfor %}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {% for article in secondary_articles %}
+                <article class="group cursor-pointer">
+                    <div class="w-full h-[240px] overflow-hidden rounded-DEFAULT bg-surface-container mb-4">
+                        {% if article.featured_image %}
+                        <img src="{{ article.featured_image.url }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        {% else %}
+                        <div class="w-full h-full bg-surface-container flex items-center justify-center">
+                            <span class="material-symbols-outlined text-4xl text-outline-variant">eco</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-primary mb-2 group-hover:text-surface-tint transition-colors">{{ article.title }}</h3>
+                    <div class="flex items-center gap-3 text-on-surface-variant font-ui-label text-ui-[12px]">
+                        <span>{{ article.reading_time }} min {% trans "de lecture" %}</span>
+                    </div>
+                </article>
+                {% empty %}
+                <article class="group cursor-pointer">
+                    <div class="w-full h-[240px] overflow-hidden rounded-DEFAULT bg-surface-container mb-4">
+                        <div class="w-full h-full bg-surface-container flex items-center justify-center">
+                            <span class="material-symbols-outlined text-4xl text-outline-variant">eco</span>
+                        </div>
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-primary mb-2 group-hover:text-surface-tint transition-colors">{% trans "Protocoles de Détoxification Hépatique Douce" %}</h3>
+                    <div class="flex items-center gap-3 text-on-surface-variant font-ui-label text-ui-[12px]">
+                        <span>5 min {% trans "de lecture" %}</span>
+                    </div>
+                </article>
+                <article class="group cursor-pointer">
+                    <div class="w-full h-[240px] overflow-hidden rounded-DEFAULT bg-surface-container mb-4">
+                        <div class="w-full h-full bg-surface-container flex items-center justify-center">
+                            <span class="material-symbols-outlined text-4xl text-outline-variant">eco</span>
+                        </div>
+                    </div>
+                    <h3 class="font-headline-sm text-headline-sm text-primary mb-2 group-hover:text-surface-tint transition-colors">{% trans "Microbiote et Axe Intestin-Cerveau" %}</h3>
+                    <div class="flex items-center gap-3 text-on-surface-variant font-ui-label text-ui-[12px]">
+                        <span>12 min {% "de lecture" %}</span>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+
+            <div class="bg-surface-container p-10 md:p-14 rounded-DEFAULT border-[0.5px] border-outline-variant/30 text-center flex flex-col items-center">
+                <span class="material-symbols-outlined text-primary mb-4 text-4xl" data-icon="local_florist">local_florist</span>
+                <h3 class="font-headline-md text-headline-md text-primary mb-4">{% trans "Recevez nos guides santé exclusifs" %}</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant mb-8 max-w-lg">{% trans "Rejoignez notre cercle privé pour recevoir des protocoles naturopathiques mensuels et des analyses cliniques détaillées." %}</p>
+                <form class="flex flex-col sm:flex-row w-full max-w-md gap-4" action="{% url 'newsletter:subscribe' %}" method="POST">
+                    {% csrf_token %}
+                    <input class="flex-1 bg-surface border-b-[1px] border-outline-variant focus:border-primary focus:ring-0 px-4 py-3 font-ui-label text-ui-label placeholder-on-surface-variant/50 transition-colors" placeholder="{% trans 'Votre adresse email' %}" type="email" name="email" required>
+                    <button class="bg-primary text-on-primary px-6 py-3 font-label-caps text-label-caps tracking-widest hover:bg-surface-tint transition-colors duration-300" type="submit">{% trans "S'INSCRIRE" %}</button>
+                </form>
+            </div>
+        </div>
+
+        <aside class="lg:col-span-4 flex flex-col gap-12 mt-12 lg:mt-0 lg:pl-8 lg:border-l-[0.5px] lg:border-outline-variant/30">
+            <div>
+                <h4 class="font-label-caps text-label-caps text-on-surface-variant tracking-widest mb-6 border-b-[0.5px] border-outline-variant/30 pb-2">{% trans "LES PLUS LUS" %}</h4>
+                <ol class="flex flex-col gap-6 counter-reset-articles">
+                    {% for popular in popular_articles %}
+                    <li class="flex gap-4 group cursor-pointer relative" style="counter-increment: articles;">
+                        <span class="font-display-lg text-headline-sm text-outline/20 font-bold before:content-[counter(articles)]"></span>
+                        <div>
+                            <h5 class="font-headline-sm text-[20px] text-primary group-hover:text-surface-tint transition-colors leading-tight mb-2">{{ popular.title }}</h5>
+                            <span class="font-ui-label text-ui-[12px] text-on-surface-variant">{{ popular.category.name|default:"Naturopathie" }}</span>
+                        </div>
+                    </li>
+                    {% empty %}
+                    <li class="flex gap-4 group cursor-pointer relative" style="counter-increment: articles;">
+                        <span class="font-display-lg text-headline-sm text-outline/20 font-bold before:content-[counter(articles)]"></span>
+                        <div>
+                            <h5 class="font-headline-sm text-[20px] text-primary group-hover:text-surface-tint transition-colors leading-tight mb-2">{% trans "Les 5 Piliers d'une Digestion Optimale" %}</h5>
+                            <span class="font-ui-label text-ui-[12px] text-on-surface-variant">{% trans "Naturopathie Fondamentale" %}</span>
+                        </div>
+                    </li>
+                    <li class="flex gap-4 group cursor-pointer relative" style="counter-increment: articles;">
+                        <span class="font-display-lg text-headline-sm text-outline/20 font-bold before:content-[counter(articles)]"></span>
+                        <div>
+                            <h5 class="font-headline-sm text-[20px] text-primary group-hover:text-surface-tint transition-colors leading-tight mb-2">{% trans "Jeûne Intermittent : Mythes et Réalités Cliniques" %}</h5>
+                            <span class="font-ui-label text-ui-[12px] text-on-surface-variant">{% trans "Nutrition" %}</span>
+                        </div>
+                    </li>
+                    <li class="flex gap-4 group cursor-pointer relative" style="counter-increment: articles;">
+                        <span class="font-display-lg text-headline-sm text-outline/20 font-bold before:content-[counter(articles)]"></span>
+                        <div>
+                            <h5 class="font-headline-sm text-[20px] text-primary group-hover:text-surface-tint transition-colors leading-tight mb-2">{% trans "Gemmothérapie : Le Pouvoir des Bourgeons" %}</h5>
+                            <span class="font-ui-label text-ui-[12px] text-on-surface-variant">{% trans "Phytothérapie" %}</span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ol>
+            </div>
+            <div>
+                <h4 class="font-label-caps text-label-caps text-on-surface-variant tracking-widest mb-6 border-b-[0.5px] border-outline-variant/30 pb-2">{% trans "SUJETS POPULAIRES" %}</h4>
+                <div class="flex flex-wrap gap-2">
+                    <a class="px-3 py-1 bg-surface-container hover:bg-surface-tint hover:text-on-primary transition-colors text-primary font-ui-label text-[13px] rounded-DEFAULT" href="#">{% trans "Inflammation" %}</a>
+                    <a class="px-3 py-1 bg-surface-container hover:bg-surface-tint hover:text-on-primary transition-colors text-primary font-ui-label text-[13px] rounded-DEFAULT" href="#">{% trans "Microbiote" %}</a>
+                    <a class="px-3 py-1 bg-surface-container hover:bg-surface-tint hover:text-on-primary transition-colors text-primary font-ui-label text-[13px] rounded-DEFAULT" href="#">{% trans "Sommeil" %}</a>
+                    <a class="px-3 py-1 bg-surface-container hover:bg-surface-tint hover:text-on-primary transition-colors text-primary font-ui-label text-[13px] rounded-DEFAULT" href="#">{% trans "Thyroïde" %}</a>
+                    <a class="px-3 py-1 bg-surface-container hover:bg-surface-tint hover:text-on-primary transition-colors text-primary font-ui-label text-[13px] rounded-DEFAULT" href="#">{% trans "Aromathérapie" %}</a>
+                </div>
+            </div>
+        </aside>
+    </div>
+</main>
+{% endblock %}

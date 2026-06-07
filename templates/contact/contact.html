@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Contact" %} - SekhmetKarnark{% endblock %}
+
+{% block content %}
+<main class="pt-32 pb-section-padding">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+        <div class="max-w-2xl mx-auto text-center mb-16">
+            <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-6">{% trans "Contactez-nous" %}</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant">{% trans "Une question, une suggestion ? Notre équipe est à votre écoute." %}</p>
+        </div>
+        <form class="max-w-lg mx-auto space-y-8" method="POST">
+            {% csrf_token %}
+            <div class="relative group">
+                <input class="block w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-on-surface font-body-md text-body-md focus:ring-0 focus:border-primary transition-colors peer placeholder-transparent" id="name" name="name" placeholder=" " required type="text">
+                <label class="absolute left-0 top-3 text-on-surface-variant font-ui-label text-ui-label transition-all peer-placeholder-shown:text-body-md peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-label-caps peer-focus:text-primary" for="name">{% trans "Nom" %}</label>
+            </div>
+            <div class="relative group">
+                <input class="block w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-on-surface font-body-md text-body-md focus:ring-0 focus:border-primary transition-colors peer placeholder-transparent" id="email" name="email" placeholder=" " required type="email">
+                <label class="absolute left-0 top-3 text-on-surface-variant font-ui-label text-ui-label transition-all peer-placeholder-shown:text-body-md peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-label-caps peer-focus:text-primary" for="email">{% trans "Email" %}</label>
+            </div>
+            <div class="relative group">
+                <input class="block w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-on-surface font-body-md text-body-md focus:ring-0 focus:border-primary transition-colors peer placeholder-transparent" id="subject" name="subject" placeholder=" " required type="text">
+                <label class="absolute left-0 top-3 text-on-surface-variant font-ui-label text-ui-label transition-all peer-placeholder-shown:text-body-md peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-label-caps peer-focus:text-primary" for="subject">{% trans "Sujet" %}</label>
+            </div>
+            <div class="relative group">
+                <textarea class="block w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-on-surface font-body-md text-body-md focus:ring-0 focus:border-primary transition-colors peer placeholder-transparent" id="message" name="message" placeholder=" " required rows="4"></textarea>
+                <label class="absolute left-0 top-3 text-on-surface-variant font-ui-label text-ui-label transition-all peer-placeholder-shown:text-body-md peer-placeholder-shown:top-3 peer-focus:-top-6 peer-focus:text-label-caps peer-focus:text-primary" for="message">{% trans "Message" %}</label>
+            </div>
+            <button class="w-full bg-primary text-on-primary font-label-caps text-label-caps py-4 uppercase tracking-widest hover:bg-surface-tint transition-colors duration-300" type="submit">{% trans "Envoyer" %}</button>
+        </form>
+    </div>
+</main>
+{% endblock %}

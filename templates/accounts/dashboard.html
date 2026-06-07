@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Mon Compte" %} - SekhmetKarnark{% endblock %}
+
+{% block body_class %}bg-background text-on-background antialiased flex selection:bg-tertiary-fixed selection:text-primary{% endblock %}
+
+{% block header %}
+<header class="md:hidden fixed top-0 w-full bg-surface-container-low border-b border-surface-container-high z-50 flex items-center justify-between px-margin-mobile py-4">
+    <h1 class="font-headline-sm text-headline-sm text-primary">SekhmetKarnark</h1>
+    <button class="text-primary p-2"><span class="material-symbols-outlined">menu</span></button>
+</header>
+<nav aria-label="Main Navigation" class="hidden md:flex h-screen w-64 fixed left-0 top-0 bg-surface-container-low shadow-sm flex-col py-section-padding space-y-8 z-40 border-r border-surface-container-high">
+    <div class="px-8 mb-8">
+        <h1 class="font-headline-sm text-headline-sm text-primary mb-2">SekhmetKarnark</h1>
+        <p class="font-ui-label text-ui-label text-on-surface-variant italic">Ancient Wisdom, Modern Science</p>
+    </div>
+    <div class="px-8 mb-12 flex items-center space-x-4">
+        <div class="w-12 h-12 rounded-full overflow-hidden border border-outline-variant bg-surface-container-highest">
+            <div class="w-full h-full flex items-center justify-center text-on-surface-variant">
+                <span class="material-symbols-outlined">person</span>
+            </div>
+        </div>
+        <div>
+            <p class="font-body-md text-body-md text-primary font-medium">{{ user.first_name|default:_("Éléonore") }}</p>
+            <p class="font-label-caps text-label-caps text-outline">{% trans "Membre Premium" %}</p>
+        </div>
+    </div>
+    <ul class="flex-grow space-y-2">
+        <li><a href="{% url 'accounts:dashboard' %}" class="flex items-center text-primary font-bold border-l-2 border-secondary-container pl-4 py-3 hover:bg-surface-container-high transition-all duration-300 translate-x-1"><span class="material-symbols-outlined mr-4" style="font-variation-settings: 'FILL' 1;">dashboard</span><span class="font-ui-label text-ui-label">{% trans "Dashboard" %}</span></a></li>
+        <li><a href="{% url 'accounts:order_history' %}" class="flex items-center text-on-surface-variant pl-4 py-3 hover:bg-surface-container-high transition-all duration-300 border-l-2 border-transparent"><span class="material-symbols-outlined mr-4">history</span><span class="font-ui-label text-ui-label">{% trans "Order History" %}</span></a></li>
+        <li><a href="{% url 'accounts:profile' %}" class="flex items-center text-on-surface-variant pl-4 py-3 hover:bg-surface-container-high transition-all duration-300 border-l-2 border-transparent"><span class="material-symbols-outlined mr-4">person_edit</span><span class="font-ui-label text-ui-label">{% trans "Profile Management" %}</span></a></li>
+        <li><a href="#" class="flex items-center text-on-surface-variant pl-4 py-3 hover:bg-surface-container-high transition-all duration-300 border-l-2 border-transparent"><span class="material-symbols-outlined mr-4">location_on</span><span class="font-ui-label text-ui-label">{% trans "Saved Addresses" %}</span></a></li>
+    </ul>
+    <div class="px-4 mt-auto space-y-2">
+        <a href="#" class="flex items-center text-on-surface-variant pl-4 py-2 hover:bg-surface-container-high transition-all duration-300 border-l-2 border-transparent"><span class="material-symbols-outlined mr-4 text-sm">spa</span><span class="font-ui-label text-ui-label">{% trans "Support" %}</span></a>
+        <a href="{% url 'accounts:logout' %}" class="flex items-center text-on-surface-variant pl-4 py-2 hover:bg-surface-container-high transition-all duration-300 border-l-2 border-transparent"><span class="material-symbols-outlined mr-4 text-sm">logout</span><span class="font-ui-label text-ui-label">{% trans "Sign Out" %}</span></a>
+    </div>
+</nav>
+{% endblock %}
+
+{% block nav %}{% endblock %}
+
+{% block content %}
+<main class="w-full md:ml-64 min-h-screen pt-24 md:pt-section-padding pb-section-padding px-margin-mobile md:px-margin-desktop">
+    <div class="max-w-container-max mx-auto">
+        <header class="mb-16">
+            <h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-4">{% trans "Bonjour," %} {{ user.first_name|default:_("Éléonore") }}.</h2>
+            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">{% trans "Bienvenue dans votre sanctuaire personnel. Voici un aperçu de votre parcours de soin et de vos dernières découvertes botaniques." %}</p>
+        </header>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+            <article class="md:col-span-8 bg-surface border border-surface-container-high rounded-xl p-8 flex flex-col justify-between ambient-shadow group hover:border-outline transition-colors duration-500">
+                <div class="flex justify-between items-start border-b border-surface-container-high pb-6 mb-6">
+                    <div>
+                        <span class="font-label-caps text-label-caps text-on-surface-variant tracking-widest uppercase block mb-2">{% trans "Dernière Acquisition" %}</span>
+                        <h3 class="font-headline-md text-headline-md text-primary">{% trans "Élixir de Nuit Restructurant" %}</h3>
+                    </div>
+                    <span class="bg-surface-container-low text-primary font-ui-label text-ui-label px-4 py-2 rounded-full border border-surface-container-highest">{% trans "En cours de livraison" %}</span>
+                </div>
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="w-full md:w-1/3 aspect-square bg-surface-container-low rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-6xl text-outline-variant">spa</span>
+                    </div>
+                    <div class="w-full md:w-2/3">
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex justify-between border-b border-surface-container-high border-opacity-50 pb-2"><span class="font-ui-label text-ui-label text-outline">{% trans "Date de commande" %}</span><span class="font-body-md text-body-md text-primary">12 Octobre 2023</span></li>
+                            <li class="flex justify-between border-b border-surface-container-high border-opacity-50 pb-2"><span class="font-ui-label text-ui-label text-outline">{% trans "Numéro de suivi" %}</span><span class="font-body-md text-body-md text-primary tracking-wider">SK-88492-FR</span></li>
+                            <li class="flex justify-between border-b border-surface-container-high border-opacity-50 pb-2"><span class="font-ui-label text-ui-label text-outline">{% trans "Rituel associé" %}</span><span class="font-body-md text-body-md text-primary">{% trans "Régénération Cellulaire" %}</span></li>
+                        </ul>
+                        <button class="bg-primary text-on-primary font-label-caps text-label-caps uppercase px-8 py-4 rounded hover:bg-on-primary-fixed-variant transition-colors duration-300 w-full md:w-auto">{% trans "Suivre le colis" %}</button>
+                    </div>
+                </div>
+            </article>
+            <aside class="md:col-span-4 flex flex-col gap-gutter">
+                <div class="bg-surface-container-low border border-surface-container-high rounded-xl p-8 text-center flex-grow flex flex-col justify-center items-center">
+                    <span class="material-symbols-outlined text-4xl text-on-tertiary-container mb-4" style="font-variation-settings: 'wght' 200;">loyalty</span>
+                    <h4 class="font-display-lg-mobile text-display-lg-mobile text-primary mb-2">{% if user.botanical_points %}{{ user.botanical_points }}{% else %}140{% endif %}</h4>
+                    <p class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">{% trans "Points Botaniques" %}</p>
+                    <div class="w-12 h-px bg-outline-variant my-4"></div>
+                    <a href="#" class="font-ui-label text-ui-label text-primary underline hover:text-secondary transition-colors">{% trans "Découvrir les récompenses" %}</a>
+                </div>
+                <div class="bg-surface border border-surface-container-high rounded-xl p-6 flex-grow">
+                    <h4 class="font-headline-sm text-headline-sm text-primary mb-6">{% trans "Accès Rapide" %}</h4>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'accounts:order_history' %}" class="flex items-center justify-between p-3 hover:bg-surface-container-low rounded transition-colors group"><div class="flex items-center text-on-surface"><span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors mr-3">receipt_long</span><span class="font-body-md text-body-md">{% trans "Mes Factures" %}</span></div><span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-transform group-hover:translate-x-1">chevron_right</span></a></li>
+                        <li><a href="#" class="flex items-center justify-between p-3 hover:bg-surface-container-low rounded transition-colors group"><div class="flex items-center text-on-surface"><span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors mr-3">favorite</span><span class="font-body-md text-body-md">{% trans "Essences Sauvegardées" %}</span></div><span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-transform group-hover:translate-x-1">chevron_right</span></a></li>
+                        <li><a href="#" class="flex items-center justify-between p-3 hover:bg-surface-container-low rounded transition-colors group"><div class="flex items-center text-on-surface"><span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors mr-3">calendar_month</span><span class="font-body-md text-body-md">{% trans "Prendre Rendez-vous" %}</span></div><span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-transform group-hover:translate-x-1">chevron_right</span></a></li>
+                    </ul>
+                </div>
+            </aside>
+            <article class="md:col-span-12 bg-primary text-on-primary rounded-xl overflow-hidden flex flex-col md:flex-row relative mt-8">
+                <div class="md:w-1/2 p-12 md:p-16 z-10 flex flex-col justify-center">
+                    <span class="font-label-caps text-label-caps text-secondary-fixed uppercase tracking-widest mb-4 block">{% trans "Conseil de l'Apothicaire" %}</span>
+                    <h3 class="font-headline-md text-headline-md mb-6 text-surface">{% trans "L'importance de l'ancrage automnal" %}</h3>
+                    <p class="font-body-md text-body-md text-primary-fixed opacity-90 mb-8 max-w-md">{% trans "À mesure que les jours raccourcissent, notre corps réclame des essences plus profondes et terreuses." %}</p>
+                    <a href="{% url 'blog:article_list' %}" class="inline-flex items-center font-ui-label text-ui-label text-surface hover:text-secondary-fixed transition-colors border-b border-surface pb-1 w-max">{% trans "Lire le Journal" %} <span class="material-symbols-outlined ml-2 text-sm">arrow_forward</span></a>
+                </div>
+                <div class="md:w-1/2 absolute inset-0 md:relative opacity-20 md:opacity-100">
+                    <div class="w-full h-full bg-primary-container"></div>
+                </div>
+            </article>
+        </div>
+    </div>
+</main>
+<style>.ambient-shadow { box-shadow: 0 20px 40px -10px rgba(2, 38, 25, 0.05); }</style>
+{% endblock %}

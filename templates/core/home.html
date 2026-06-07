@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}SekhmetKarnark - {% trans "Sagesse Ancienne, Science Moderne" %}{% endblock %}
+
+{% block content %}
+<main>
+    <section class="relative min-h-screen flex items-center justify-center pt-24 px-margin-mobile md:px-margin-desktop overflow-hidden bg-surface-container">
+        <div class="absolute inset-0 z-0">
+            <div class="w-full h-full bg-cover bg-center" style="background-image: url('{% static 'images/hero-bg.jpg' %}');"></div>
+            <div class="absolute inset-0 bg-surface/30 backdrop-blur-[2px]"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-surface/40"></div>
+        </div>
+        <div class="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center gap-8">
+            <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary tracking-tight">
+                {% trans "Sagesse Ancienne," %}<br>{% trans "Science Moderne" %}
+            </h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                {% trans "Découvrez une approche naturopathique éditoriale et haut de gamme. Des remèdes curatifs alliant la précision clinique à l'apothicairerie botanique luxueuse." %}
+            </p>
+            <a href="{% url 'shop:product_list' %}" class="mt-8 px-8 py-4 bg-primary text-on-primary font-ui-label text-ui-label text-label-caps uppercase tracking-widest hover:bg-surface-tint transition-all duration-300 border border-transparent hover:border-secondary-fixed">
+                {% trans "Explorer nos remèdes" %}
+            </a>
+        </div>
+    </section>
+
+    <section class="py-12 border-b-[0.5px] border-outline-variant/50 bg-surface">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4 text-center">
+                <div class="flex items-center gap-4">
+                    <span class="material-symbols-outlined text-secondary-container text-3xl">spa</span>
+                    <span class="font-ui-label text-ui-label text-label-caps uppercase tracking-widest text-primary">{% trans "Expertise Naturopathique" %}</span>
+                </div>
+                <div class="hidden md:block w-px h-8 bg-outline-variant/50"></div>
+                <div class="flex items-center gap-4">
+                    <span class="material-symbols-outlined text-secondary-container text-3xl">verified</span>
+                    <span class="font-ui-label text-ui-label text-label-caps uppercase tracking-widest text-primary">{% trans "Produits Certifiés" %}</span>
+                </div>
+                <div class="hidden md:block w-px h-8 bg-outline-variant/50"></div>
+                <div class="flex items-center gap-4">
+                    <span class="material-symbols-outlined text-secondary-container text-3xl">local_shipping</span>
+                    <span class="font-ui-label text-ui-label text-label-caps uppercase tracking-widest text-primary">{% trans "Livraison Sécurisée" %}</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

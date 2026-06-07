@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Profil & Informations" %} - SekhmetKarnark{% endblock %}
+
+{% block body_class %}bg-background text-on-background font-body-md antialiased min-h-screen flex selection:bg-tertiary-fixed selection:text-on-tertiary-fixed{% endblock %}
+
+{% block header %}
+<nav class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-primary-container shadow-sm opacity-50 z-40 py-section-padding space-y-8 border-r border-surface-container-high transition-opacity hover:opacity-100 duration-500">
+    <div class="px-8 flex flex-col items-start gap-4">
+        <div class="w-16 h-16 rounded-full overflow-hidden border border-outline-variant">
+            <div class="w-full h-full flex items-center justify-center"><span class="material-symbols-outlined text-3xl text-outline-variant">person</span></div>
+        </div>
+        <div>
+            <h1 class="font-headline-sm text-headline-sm text-primary dark:text-primary-fixed-dim">SekhmetKarnark</h1>
+            <p class="font-ui-label text-ui-label text-on-surface-variant mt-1">Ancient Wisdom, Modern Science</p>
+        </div>
+    </div>
+    <div class="flex-1 flex flex-col space-y-2 mt-8">
+        <a href="{% url 'accounts:dashboard' %}" class="flex items-center gap-4 py-3 px-8 text-on-surface-variant dark:text-outline-variant pl-4 hover:bg-surface-container-high dark:hover:bg-primary transition-all duration-300 font-ui-label text-ui-label group"><span class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span><span class="group-hover:text-primary transition-colors">{% trans "Dashboard" %}</span></a>
+        <a href="{% url 'accounts:order_history' %}" class="flex items-center gap-4 py-3 px-8 text-on-surface-variant dark:text-outline-variant pl-4 hover:bg-surface-container-high dark:hover:bg-primary transition-all duration-300 font-ui-label text-ui-label group"><span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span><span class="group-hover:text-primary transition-colors">{% trans "Order History" %}</span></a>
+        <a href="{% url 'accounts:profile' %}" class="flex items-center gap-4 py-3 px-8 text-primary dark:text-secondary-fixed-dim font-bold border-l-2 border-secondary-container pl-4 bg-surface-container-high/30 translate-x-1 duration-200 font-ui-label text-ui-label"><span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">person_edit</span><span>{% trans "Profile Management" %}</span></a>
+        <a href="#" class="flex items-center gap-4 py-3 px-8 text-on-surface-variant dark:text-outline-variant pl-4 hover:bg-surface-container-high dark:hover:bg-primary transition-all duration-300 font-ui-label text-ui-label group"><span class="material-symbols-outlined group-hover:text-primary transition-colors">location_on</span><span class="group-hover:text-primary transition-colors">{% trans "Saved Addresses" %}</span></a>
+    </div>
+    <div class="flex flex-col space-y-2 mb-8">
+        <a href="#" class="flex items-center gap-4 py-3 px-8 text-on-surface-variant dark:text-outline-variant pl-4 hover:bg-surface-container-high dark:hover:bg-primary transition-all duration-300 font-ui-label text-ui-label group"><span class="material-symbols-outlined group-hover:text-primary transition-colors">spa</span><span class="group-hover:text-primary transition-colors">{% trans "Support" %}</span></a>
+        <a href="{% url 'accounts:logout' %}" class="flex items-center gap-4 py-3 px-8 text-on-surface-variant dark:text-outline-variant pl-4 hover:bg-surface-container-high dark:hover:bg-primary transition-all duration-300 font-ui-label text-ui-label group"><span class="material-symbols-outlined group-hover:text-error transition-colors">logout</span><span class="group-hover:text-error transition-colors">{% trans "Sign Out" %}</span></a>
+    </div>
+</nav>
+<header class="md:hidden fixed top-0 left-0 w-full bg-background border-b border-surface-container-high z-50 flex justify-between items-center px-margin-mobile py-4">
+    <span class="font-headline-sm text-headline-sm text-primary">SekhmetKarnark</span>
+    <button class="text-primary p-2"><span class="material-symbols-outlined">menu</span></button>
+</header>
+{% endblock %}
+
+{% block nav %}{% endblock %}
+
+{% block content %}
+<main class="flex-1 md:ml-64 pt-24 md:pt-section-padding px-margin-mobile md:px-margin-desktop pb-section-padding w-full max-w-[100vw]">
+    <div class="max-w-3xl mx-auto md:ml-0 xl:mx-auto">
+        <header class="mb-16 md:mb-24 flex justify-between items-end">
+            <div>
+                <p class="font-label-caps text-label-caps text-on-surface-variant mb-4 tracking-widest uppercase">{% trans "Mon Compte" %}</p>
+                <h2 class="font-headline-md text-headline-md text-primary">{% trans "Profil & Informations" %}</h2>
+            </div>
+        </header>
+        <form class="space-y-20" method="POST" action="{% url 'accounts:profile' %}">
+            {% csrf_token %}
+            <section>
+                <div class="flex items-center justify-between border-b border-outline-variant pb-4 mb-8">
+                    <h3 class="font-headline-sm text-headline-sm text-primary">{% trans "Informations Personnelles" %}</h3>
+                    <span class="material-symbols-outlined text-secondary opacity-50">person</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+                    <div class="relative pt-6">
+                        <input class="floating-input w-full bg-transparent border-0 border-b border-outline-variant px-0 py-2 font-body-lg text-body-lg text-primary focus:ring-0 focus:border-primary transition-colors duration-300" id="firstName" name="first_name" placeholder=" " required type="text" value="{{ user.first_name|default:'Éléonore' }}">
+                        <label class="floating-label absolute left-0 top-8 font-ui-label text-ui-label text-on-surface-variant transition-all duration-300 origin-left cursor-text" for="firstName">{% trans "Prénom" %}</label>
+                    </div>
+                    <div class="relative pt-6">
+                        <input class="floating-input w-full bg-transparent border-0 border-b border-outline-variant px-0 py-2 font-body-lg text-body-lg text-primary focus:ring-0 focus:border-primary transition-colors duration-300" id="lastName" name="last_name" placeholder " required type="text" value="{{ user.last_name|default:'Dubois' }}">
+                        <label class="floating-label absolute left-0 top-8 font-ui-label text-ui-label text-on-surface-variant transition-all duration-300 origin-left cursor-text" for="lastName">{% trans "Nom" %}</label>
+                    </div>
+                    <div class="relative pt-6 md:col-span-2">
+                        <input class="floating-input w-full bg-transparent border-0 border-b border-outline-variant px-0 py-2 font-body-lg text-body-lg text-primary focus:ring-0 focus:border-primary transition-colors duration-300" id="email" name="email" placeholder=" " required type="email" value="{{ user.email|default:'eleonore.dubois@exemple.com' }}">
+                        <label class="floating-label absolute left-0 top-8 font-ui-label text-ui-label text-on-surface-variant transition-all duration-300 origin-left cursor-text" for="email">{% trans "Adresse Email" %}</label>
+                    </div>
+                    <div class="relative pt-6 md:col-span-2">
+                        <input class="floating-input w-full bg-transparent border-0 border-b border-outline-variant px-0 py-2 font-body-lg text-body-lg text-primary focus:ring-0 focus:border-primary transition-colors duration-300" id="phone" name="phone" placeholder=" " type="tel" value="{{ user.phone|default:'+33 6 12 34 56 78' }}">
+                        <label class="floating-label absolute left-0 top-8 font-ui-label text-ui-label text-on-surface-variant transition-all duration-300 origin-left cursor-text" for="phone">{% trans "Numéro de Téléphone (Optionnel)" %}</label>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <div class="flex items-center justify-between border-b border-outline-variant pb-4 mb-8">
+                    <h3 class="font-headline-sm text-headline-sm text-primary">{% trans "Sécurité" %}</h3>
+                    <span class="material-symbols-outlined text-secondary opacity-50">lock</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+                    <div class="relative pt-6 md:col-span-2">
+                        <input class="floating-input w-full bg-transparent border-0 border-b border-outline-variant px-0 py-2 font-body-lg text-body-lg text-primary focus:ring-0 focus:border-primary transition-colors duration-300" id="currentPassword" name="current_password" placeholder=" " type="password">
+                        <label class="floating-label absolute left-0 top-8 font-ui-label text-ui-label text-on-surface-variant transition-all duration-300 origin-left cursor-text" for="currentPassword">{% trans "Mot de passe actuel" %}</label>
+                    </div>
+                    <div class="relative pt-6">
+                        <input class="floating-input w-full bg-transparent border-0 border-b border-outline-variant px-0 py-2 font-body-lg text-body-lg text-primary focus:ring-0 focus:border-primary transition-colors duration-300" id="newPassword" name="new_password" placeholder=" " type="password">
+                        <label class="floating-label absolute left-0 top-8 font-ui-label text-ui-label text-on-surface-variant transition-all duration-300 origin-left cursor-text" for="newPassword">{% trans "Nouveau mot de passe" %}</label>
+                    </div>
+                    <div class="relative pt-6">
+                        <input class="floating-input w-full bg-transparent border-0 border-b border-outline-variant px-0 py-2 font-body-lg text-body-lg text-primary focus:ring-0 focus:border-primary transition-colors duration-300" id="confirmPassword" name="confirm_password" placeholder=" " type="password">
+                        <label class="floating-label absolute left-0 top-8 font-ui-label text-ui-label text-on-surface-variant transition-all duration-300 origin-left cursor-text" for="confirmPassword">{% trans "Confirmer le mot de passe" %}</label>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <div class="flex items-center justify-between border-b border-outline-variant pb-4 mb-8">
+                    <h3 class="font-headline-sm text-headline-sm text-primary">{% trans "Préférences de Communication" %}</h3>
+                    <span class="material-symbols-outlined text-secondary opacity-50">mail</span>
+                </div>
+                <div class="bg-surface-container-low border border-surface-container-high p-8 rounded-lg flex items-start gap-6">
+                    <div class="pt-1">
+                        <input checked class="w-5 h-5 border-outline-variant rounded-sm text-primary focus:ring-primary focus:ring-offset-background bg-transparent cursor-pointer transition-colors" id="newsletter" name="newsletter" type="checkbox">
+                    </div>
+                    <div>
+                        <label class="font-ui-label text-ui-label text-primary cursor-pointer block mb-2" for="newsletter">{% trans "Abonnement à la Gazette Botanique" %}</label>
+                        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-xl">{% trans "Recevez nos découvertes cliniques, des invitations exclusives à nos rituels, et des conseils personnalisés pour votre équilibre naturel." %}</p>
+                    </div>
+                </div>
+            </section>
+            <div class="pt-8 flex justify-end gap-6 border-t border-outline-variant">
+                <button class="px-8 py-4 font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300" type="button">{% trans "Annuler" %}</button>
+                <button class="px-10 py-4 bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-widest hover:bg-tertiary hover:border-secondary transition-all duration-300 border border-transparent shadow-sm" type="submit">{% trans "Enregistrer les modifications" %}</button>
+            </div>
+        </form>
+    </div>
+</main>
+<style>
+    .floating-input:focus ~ .floating-label, .floating-input:not(:placeholder-shown) ~ .floating-label { transform: translateY(-1.5rem) scale(0.85); color: #022619; }
+    .floating-input:-webkit-autofill ~ .floating-label { transform: translateY(-1.5rem) scale(0.85); }
+</style>
+{% endblock %}

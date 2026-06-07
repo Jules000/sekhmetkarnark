@@ -1,0 +1,229 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{{ product.name }} - SekhmetKarnark{% endblock %}
+
+{% block body_class %}bg-background text-on-background font-body-md antialiased overflow-x-hidden{% endblock %}
+
+{% block header %}
+<nav class="bg-background dark:bg-surface w-full top-0 sticky border-b border-outline-variant dark:border-outline z-50">
+    <div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 max-w-container-max mx-auto">
+        <div class="hidden md:flex gap-8">
+            <a href="{% url 'home' %}" class="font-ui-label text-ui-label uppercase tracking-widest text-on-surface-variant hover:text-secondary transition-colors duration-300">{% trans "Home" %}</a>
+            <a href="{% url 'blog:article_list' %}" class="font-ui-label text-ui-label uppercase tracking-widest text-on-surface-variant hover:text-secondary transition-colors duration-300">{% trans "Blog" %}</a>
+            <a href="{% url 'shop:product_list' %}" class="font-ui-label text-ui-label uppercase tracking-widest text-primary font-bold border-b border-secondary hover:text-secondary transition-colors duration-300 opacity-80">{% trans "Shop" %}</a>
+            <a href="{% url 'about' %}" class="font-ui-label text-ui-label uppercase tracking-widest text-on-surface-variant hover:text-secondary transition-colors duration-300">{% trans "About" %}</a>
+            <a href="{% url 'contact:contact' %}" class="font-ui-label text-ui-label uppercase tracking-widest text-on-surface-variant hover:text-secondary transition-colors duration-300">{% trans "Contact" %}</a>
+        </div>
+        <button class="md:hidden text-primary"><span class="material-symbols-outlined">menu</span></button>
+        <a class="font-headline-sm text-headline-sm text-primary dark:text-primary-fixed-dim absolute left-1/2 transform -translate-x-1/2" href="{% url 'home' %}">SekhmetKarnark</a>
+        <div class="flex gap-4 text-primary">
+            <button class="hover:text-secondary transition-colors duration-300"><span class="material-symbols-outlined">search</span></button>
+            <a href="{% url 'accounts:login' %}" class="hover:text-secondary transition-colors duration-300 hidden md:block"><span class="material-symbols-outlined">person</span></a>
+            <a href="{% url 'cart:cart_detail' %}" class="hover:text-secondary transition-colors duration-300 relative">
+                <span class="material-symbols-outlined">shopping_cart</span>
+                <span class="absolute -top-1 -right-1 bg-secondary text-on-secondary rounded-full w-4 h-4 text-[10px] flex items-center justify-center">{{ cart_item_count|default:0 }}</span>
+            </a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-section-padding">
+    <nav class="mb-12">
+        <ol class="flex items-center space-x-2 font-ui-label text-ui-label text-on-surface-variant">
+            <li><a href="{% url 'shop:product_list' %}" class="hover:text-secondary transition-colors">{% trans "Accueil" %}</a></li>
+            <li><span class="material-symbols-outlined text-[14px]">chevron_right</span></li>
+            <li><a href="{% url 'shop:product_list' %}" class="hover:text-secondary transition-colors">{% trans "Élixirs" %}</a></li>
+            <li><span class="material-symbols-outlined text-[14px]">chevron_right</span></li>
+            <li class="text-primary font-medium">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-section-padding">
+        <div class="md:col-span-7 space-y-8">
+            <div class="relative w-full aspect-[4/5] bg-surface-container-highest rounded-lg overflow-hidden flex items-center justify-center group">
+                {% if product.main_image %}
+                <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105">
+                {% else %}
+                <div class="w-full h-full flex items-center justify-center">
+                    <span class="material-symbols-outlined text-8xl text-outline-variant">spa</span>
+                </div>
+                {% endif %}
+            </div>
+            <div class="grid grid-cols-4 gap-4">
+                {% for image in product.images.all %}
+                <button class="aspect-square bg-surface-container-highest border border-outline-variant {% if forloop.first %}opacity-100{% else %}opacity-60{% endif %} hover:opacity-100 transition-opacity">
+                    {% if image.image_thumb %}
+                    <img src="{{ image.image_thumb.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+                    {% endif %}
+                </button>
+                {% empty %}
+                <button class="aspect-square bg-surface-container-highest border border-outline-variant opacity-100 transition-opacity">
+                    <div class="w-full h-full flex items-center justify-center"><span class="material-symbols-outlined text-2xl text-outline-variant">image</span></div>
+                </button>
+                <button class="aspect-square bg-surface-container-highest opacity-60 hover:opacity-100 transition-opacity">
+                    <div class="w-full h-full flex items-center justify-center"><span class="material-symbols-outlined text-2xl text-outline-variant">image</span></div>
+                </button>
+                <button class="aspect-square bg-surface-container-highest opacity-60 hover:opacity-100 transition-opacity">
+                    <div class="w-full h-full flex items-center justify-center"><span class="material-symbols-outlined text-2xl text-outline-variant">image</span></div>
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="md:col-span-5 flex flex-col pt-8 md:pt-16 md:pl-8">
+            <div class="mb-6">
+                <span class="font-label-caps text-label-caps text-secondary-fixed-dim uppercase tracking-widest mb-4 block">{{ product.category.name|default:_("Élixir Botanique") }}</span>
+                <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-4">{{ product.name }}</h1>
+                <p class="font-headline-sm text-headline-sm italic text-secondary mb-6">{{ product.price }} €</p>
+            </div>
+            <div class="font-body-md text-body-md text-on-surface-variant mb-10 space-y-4">
+                <p>{{ product.short_description|default:product.description }}</p>
+                <ul class="space-y-2 mt-4">
+                    <li class="flex items-start gap-2"><span class="material-symbols-outlined text-secondary text-[18px]">eco</span><span>100% {% trans "d'origine naturelle" %}</span></li>
+                    <li class="flex items-start gap-2"><span class="material-symbols-outlined text-secondary text-[18px]">cruelty_free</span><span>{% trans "Vegan & Cruelty-free" %}</span></li>
+                </ul>
+            </div>
+
+            <div class="border-t border-b border-outline-variant py-8 mb-10">
+                <form class="flex flex-col gap-6" action="{% url 'cart:cart_add' product.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="flex items-center gap-4">
+                        <label class="font-ui-label text-ui-label text-primary" for="quantity">{% trans "Quantité" %}</label>
+                        <div class="flex items-center border border-outline-variant rounded">
+                            <button class="px-3 py-1 text-primary hover:bg-surface-container-highest transition-colors" type="button" onclick="this.nextElementSibling.stepDown()">-</button>
+                            <input class="w-12 text-center font-body-md border-none focus:ring-0 bg-transparent text-primary p-1" id="quantity" min="1" name="quantity" type="number" value="1">
+                            <button class="px-3 py-1 text-primary hover:bg-surface-container-highest transition-colors" type="button" onclick="this.previousElementSibling.stepUp()">+</button>
+                        </div>
+                    </div>
+                    <button class="btn-primary w-full bg-primary text-on-primary font-ui-label text-ui-label uppercase tracking-widest py-4 rounded-sm flex justify-center items-center gap-2" type="submit">
+                        {% trans "Ajouter au panier" %}
+                    </button>
+                </form>
+            </div>
+
+            <div class="mt-8">
+                <div class="flex gap-8 border-b border-outline-variant mb-6" role="tablist">
+                    <button class="font-label-caps text-label-caps uppercase tracking-widest pb-2 border-b-2 border-primary text-primary" onclick="switchTab('benefices')">{% trans "Bénéfices" %}</button>
+                    <button class="font-label-caps text-label-caps uppercase tracking-widest pb-2 border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-colors" onclick="switchTab('conseils')">{% trans "Conseils d'utilisation" %}</button>
+                    <button class="font-label-caps text-label-caps uppercase tracking-widest pb-2 border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-colors" onclick="switchTab('composition')">{% trans "Composition" %}</button>
+                </div>
+                <div class="tab-content active font-body-md text-body-md text-on-surface-variant" id="benefices">
+                    <p>{{ product.benefits|default:_("Ce produit agit sur l'équilibre cutané et l'apaisement nerveux.") }}</p>
+                </div>
+                <div class="tab-content font-body-md text-body-md text-on-surface-variant" id="conseils">
+                    <p>{{ product.usage_instructions|default:_("Le soir, sur une peau parfaitement nettoyée.") }}</p>
+                </div>
+                <div class="tab-content font-body-md text-body-md text-on-surface-variant" id="composition">
+                    <p>{{ product.composition|default:_("Ingrédients 100% d'origine naturelle.") }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% if product.benefits or product.usage_instructions %}
+    <section class="mb-section-padding bg-surface-container-low p-8 md:p-16 rounded-sm border border-outline-variant/30 flex flex-col items-center text-center max-w-4xl mx-auto">
+        <span class="material-symbols-outlined text-secondary text-4xl mb-6">local_florist</span>
+        <h2 class="font-headline-md text-headline-md text-primary mb-6">{% trans "Expertise Naturopathique" %}</h2>
+        <blockquote class="font-body-lg text-body-lg text-on-surface-variant italic mb-8 max-w-2xl">
+            {% trans "Ce produit est formulé selon les principes de la naturopathie moderne, alliant la précision clinique à l'apothicairerie botanique luxueuse." %}
+        </blockquote>
+        <p class="font-label-caps text-label-caps uppercase tracking-widest text-primary">— {% trans "Dr. E. Dubois, Botaniste & Naturopathe" %}</p>
+    </section>
+    {% endif %}
+
+    {% if related_products %}
+    <section class="mb-section-padding">
+        <div class="flex justify-between items-end mb-10 border-b border-outline-variant pb-4">
+            <h2 class="font-headline-md text-headline-md text-primary">{% trans "Vous aimerez aussi" %}</h2>
+            <a href="{% url 'shop:product_list' %}" class="font-ui-label text-ui-label text-secondary hover:text-primary transition-colors flex items-center gap-1">
+                {% trans "Voir la collection" %} <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+            </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {% for related in related_products %}
+            <a class="group block" href="{% url 'shop:product_detail' slug=related.slug %}">
+                <div class="aspect-[3/4] bg-surface-container-highest mb-4 overflow-hidden rounded-sm relative">
+                    {% if related.main_image %}
+                    <img src="{{ related.main_image.url }}" alt="{{ related.name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    {% else %}
+                    <div class="w-full h-full flex items-center justify-center">
+                        <span class="material-symbols-outlined text-6xl text-outline-variant">spa</span>
+                    </div>
+                    {% endif %}
+                    <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors duration-300"></div>
+                </div>
+                <div class="flex flex-col items-center text-center">
+                    <h3 class="font-headline-sm text-headline-sm text-primary mb-1">{{ related.name }}</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant mb-2">{{ related.short_description|truncatewords:8 }}</p>
+                    <p class="font-ui-label text-ui-label italic text-secondary">{{ related.price }} €</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</main>
+{% endblock %}
+
+{% block footer %}
+<footer class="bg-surface-container-highest dark:bg-surface-container-low w-full mt-section-padding">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter px-margin-mobile md:px-margin-desktop py-section-padding max-w-container-max mx-auto">
+        <div class="md:col-span-4 mb-8 md:mb-0">
+            <a class="font-headline-md text-headline-md text-primary mb-4 block" href="{% url 'home' %}">SekhmetKarnark</a>
+            <p class="font-body-md text-body-md text-on-surface-variant mb-8 max-w-xs">{% trans "L'apothicairerie moderne. Une approche éditoriale de la naturopathie, alliant sagesse ancienne et rigueur scientifique." %}</p>
+            <p class="font-body-md text-body-md text-primary dark:text-on-surface">&copy; {% now "Y" %} SekhmetKarnark. Ancient wisdom, modern science.</p>
+        </div>
+        <div class="md:col-span-2 md:col-start-7 mb-8 md:mb-0">
+            <h4 class="font-label-caps text-label-caps uppercase tracking-widest text-primary mb-6">{% trans "Explore" %}</h4>
+            <ul class="space-y-4">
+                <li><a href="{% url 'shop:product_list' %}" class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors">{% trans "Shop" %}</a></li>
+                <li><a href="{% url 'about' %}" class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors">{% trans "About Us" %}</a></li>
+                <li><a href="{% url 'blog:article_list' %}" class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors">{% trans "Journal" %}</a></li>
+            </ul>
+        </div>
+        <div class="md:col-span-2 mb-8 md:mb-0">
+            <h4 class="font-label-caps text-label-caps uppercase tracking-widest text-primary mb-6">{% trans "Assistance" %}</h4>
+            <ul class="space-y-4">
+                <li><a href="{% url 'newsletter:subscribe' %}" class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors">{% trans "Newsletter" %}</a></li>
+                <li><a href="#" class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors">{% trans "Shipping & Returns" %}</a></li>
+                <li><a href="{% url 'contact:contact' %}" class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors">{% trans "Contact" %}</a></li>
+            </ul>
+        </div>
+        <div class="md:col-span-2">
+            <h4 class="font-label-caps text-label-caps uppercase tracking-widest text-primary mb-6">{% trans "Légal" %}</h4>
+            <ul class="space-y-4">
+                <li><a href="#" class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors">{% trans "Privacy Policy" %}</a></li>
+                <li><a href="#" class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors">{% trans "Terms of Service" %}</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+{% endblock %}
+
+{% block extra_js %}
+<style>
+    .tab-content { display: none; animation: fadeIn 0.5s ease-in-out; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .btn-primary { transition: all 0.3s ease; }
+    .btn-primary:hover { background-color: #002115; transform: translateY(-1px); }
+</style>
+<script>
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('[role="tablist"] button').forEach(btn => {
+            btn.classList.remove('border-primary', 'text-primary');
+            btn.classList.add('border-transparent', 'text-on-surface-variant');
+        });
+        document.getElementById(tabId).classList.add('active');
+        const activeBtn = Array.from(document.querySelectorAll('[role="tablist"] button')).find(btn => btn.getAttribute('onclick').includes(tabId));
+        if(activeBtn) {
+            activeBtn.classList.remove('border-transparent', 'text-on-surface-variant');
+            activeBtn.classList.add('border-primary', 'text-primary');
+        }
+    }
+</script>
+{% endblock %}

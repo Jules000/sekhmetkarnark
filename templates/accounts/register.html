@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Création de compte" %} - SekhmetKarnark{% endblock %}
+
+{% block body_class %}bg-inverse-on-surface text-on-surface min-h-screen flex items-center justify-center font-body-md text-body-md antialiased selection:bg-primary-fixed selection:text-on-primary-fixed{% endblock %}
+
+{% block header %}{% endblock %}
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="w-full min-h-screen flex flex-col md:flex-row">
+    <div class="hidden md:flex md:w-5/12 lg:w-1/2 relative bg-surface-container overflow-hidden">
+        <div class="absolute inset-0 bg-black/10 z-10"></div>
+        <div class="absolute inset-0 w-full h-full bg-surface-container"></div>
+        <div class="absolute top-margin-desktop left-margin-desktop z-20 mix-blend-multiply opacity-20">
+            <span class="material-symbols-outlined" style="font-size: 240px; font-variation-settings: 'FILL' 0;">spa</span>
+        </div>
+    </div>
+    <div class="w-full md:w-7/12 lg:w-1/2 flex flex-col items-center justify-center p-margin-mobile md:p-margin-desktop relative">
+        <div class="w-full max-w-md flex flex-col items-center">
+            <a class="mb-16 transform transition-transform hover:scale-105 duration-500" href="{% url 'home' %}">
+                <img src="{% static 'icons/sekhmetkarnark-logo.svg' %}" alt="SekhmetKarnark Logo" class="w-48 h-auto object-contain">
+            </a>
+            <div class="w-full text-center mb-12">
+                <h1 class="text-headline-md font-headline-md text-primary-container mb-4">Join the Circle</h1>
+                <p class="text-body-md font-body-md text-on-surface-variant">{% trans "Begin your journey towards holistic wellness and curated apothecary artifacts." %}</p>
+            </div>
+            <form class="w-full flex flex-col gap-6" method="POST" action="{% url 'accounts:register' %}">
+                {% csrf_token %}
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="input-group flex-1">
+                        <input class="font-body-md text-body-md" id="firstName" name="first_name" placeholder=" " required type="text">
+                        <label class="font-ui-label text-ui-label" for="firstName">{% trans "First Name" %}</label>
+                    </div>
+                    <div class="input-group flex-1">
+                        <input class="font-body-md text-body-md" id="lastName" name="last_name" placeholder=" " required type="text">
+                        <label class="font-ui-label text-ui-label" for="lastName">{% trans "Last Name" %}</label>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input class="font-body-md text-body-md" id="email" name="email" placeholder=" " required type="email">
+                    <label class="font-ui-label text-ui-label" for="email">{% trans "Email Address" %}</label>
+                </div>
+                <div class="input-group mb-2">
+                    <input class="font-body-md text-body-md" id="password" name="password" placeholder=" " required type="password">
+                    <label class="font-ui-label text-ui-label" for="password">{% trans "Password" %}</label>
+                    <div class="mt-4 flex flex-col gap-2">
+                        <div class="flex gap-1 h-1 w-full">
+                            <div class="h-full w-1/4 bg-primary-container rounded-none transition-all duration-300"></div>
+                            <div class="h-full w-1/4 bg-surface-variant rounded-none transition-all duration-300"></div>
+                            <div class="h-full w-1/4 bg-surface-variant rounded-none transition-all duration-300"></div>
+                            <div class="h-full w-1/4 bg-surface-variant rounded-none transition-all duration-300"></div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-ui-label text-on-surface-variant uppercase tracking-widest">{% trans "Strength" %}</span>
+                            <span class="text-[10px] font-ui-label text-primary-container uppercase tracking-widest">{% trans "Weak" %}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input class="font-body-md text-body-md" id="confirmPassword" name="confirm_password" placeholder=" " required type="password">
+                    <label class="font-ui-label text-ui-label" for="confirmPassword">{% trans "Confirm Password" %}</label>
+                </div>
+                <div class="flex items-start gap-4 mt-6">
+                    <div class="pt-1">
+                        <input class="custom-checkbox" id="gdpr" name="gdpr" required type="checkbox">
+                    </div>
+                    <label class="text-ui-label font-ui-label text-on-surface-variant cursor-pointer select-none" for="gdpr">
+                        {% trans "I consent to the processing of my personal data in accordance with the" %} <a class="text-primary-container border-b border-primary-container hover:text-secondary transition-colors duration-300" href="#">{% trans "Privacy Policy" %}</a>. {% trans "I understand this is necessary to establish my account." %}
+                    </label>
+                </div>
+                <div class="mt-8 flex flex-col gap-6 items-center">
+                    <button class="w-full bg-primary-container text-on-primary py-4 px-8 font-label-caps text-label-caps uppercase tracking-widest hover:bg-on-primary-fixed-variant transition-colors duration-300 border border-transparent hover:border-secondary-fixed" type="submit">{% trans "Create Account" %}</button>
+                    <p class="text-ui-label font-ui-label text-on-surface-variant">
+                        {% trans "Already part of the circle?" %}
+                        <a href="{% url 'accounts:login' %}" class="text-primary-container font-medium hover:text-secondary transition-colors duration-300 ml-2">{% trans "Sign In" %}</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+        <div class="absolute bottom-8 left-0 right-0 text-center pointer-events-none">
+            <span class="text-[10px] font-ui-label text-outline uppercase tracking-widest">{% trans "Secure Form" %}</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .glass-panel { background: rgba(245, 240, 232, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    .input-group { position: relative; padding-top: 1.5rem; }
+    .input-group input { width: 100%; background: transparent; border: none; border-bottom: 1px solid #c1c8c2; padding: 0.5rem 0; color: #1d1c17; transition: border-color 0.3s ease; }
+    .input-group input:focus { outline: none; border-bottom-color: #1a3c2e; box-shadow: none; }
+    .input-group label { position: absolute; left: 0; top: 2rem; color: #414844; transition: all 0.3s ease; pointer-events: none; transform: translateY(-50%); }
+    .input-group input:focus ~ label, .input-group input:not(:placeholder-shown) ~ label { top: 0.5rem; font-size: 0.75rem; color: #1a3c2e; letter-spacing: 0.05em; }
+    .custom-checkbox { appearance: none; width: 1.25rem; height: 1.25rem; border: 1px solid #727974; border-radius: 0; display: grid; place-content: center; transition: all 0.2s ease-in-out; background-color: transparent; cursor: pointer; }
+    .custom-checkbox::before { content: ""; width: 0.65em; height: 0.65em; transform: scale(0); transition: 120ms transform ease-in-out; box-shadow: inset 1em 1em #ffffff; background-color: #ffffff; transform-origin: center; clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%); }
+    .custom-checkbox:checked { background-color: #1a3c2e; border-color: #1a3c2e; }
+    .custom-checkbox:checked::before { transform: scale(1); }
+</style>
+{% endblock %}

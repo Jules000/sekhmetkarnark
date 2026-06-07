@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Verify Your Account" %} - SekhmetKarnark{% endblock %}
+
+{% block body_class %}bg-background text-on-background min-h-screen flex flex-col justify-center items-center p-margin-mobile md:p-margin-desktop font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed{% endblock %}
+
+{% block header %}{% endblock %}
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-md mx-auto relative z-10">
+    <div class="mb-12 flex justify-center">
+        <img src="{% static 'icons/sekhmetkarnark-logo.svg' %}" alt="SekhmetKarnark Logo" class="h-16 w-auto object-contain">
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant/30 p-8 md:p-12 shadow-[0_40px_80px_rgba(26,60,46,0.05)] text-center relative overflow-hidden group">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+        <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-4 tracking-tight">{% trans "Vérifiez votre compte" %}</h1>
+        <p class="font-body-md text-body-md text-on-surface-variant mb-10">
+            {% trans "Nous avons envoyé un code de sécurité à 6 chiffres à votre adresse email. Veuillez le saisir ci-dessous." %}
+        </p>
+        <form class="space-y-8 flex flex-col items-center" id="otp-form" method="POST">
+            {% csrf_token %}
+            <div class="flex gap-2 sm:gap-4 justify-center w-full" id="otp-container">
+                <input aria-label="Digit 1" autofocus class="w-12 h-14 sm:w-14 sm:h-16 text-center font-headline-sm text-headline-sm text-primary bg-surface-container-low border-b border-outline-variant focus:border-primary focus:ring-0 focus:outline-none transition-colors duration-300 rounded-none shadow-none placeholder:text-outline/30" maxlength="1" name="digit_1" placeholder="•" type="text">
+                <input aria-label="Digit 2" class="w-12 h-14 sm:w-14 sm:h-16 text-center font-headline-sm text-headline-sm text-primary bg-surface-container-low border-b border-outline-variant focus:border-primary focus:ring-0 focus:outline-none transition-colors duration-300 rounded-none shadow-none placeholder:text-outline/30" maxlength="1" name="digit_2" placeholder="•" type="text">
+                <input aria-label="Digit 3" class="w-12 h-14 sm:w-14 sm:h-16 text-center font-headline-sm text-headline-sm text-primary bg-surface-container-low border-b border-outline-variant focus:border-primary focus:ring-0 focus:outline-none transition-colors duration-300 rounded-none shadow-none placeholder:text-outline/30" maxlength="1" name="digit_3" placeholder="•" type="text">
+                <input aria-label="Digit 4" class="w-12 h-14 sm:w-14 sm:h-16 text-center font-headline-sm text-headline-sm text-primary bg-surface-container-low border-b border-outline-variant focus:border-primary focus:ring-0 focus:outline-none transition-colors duration-300 rounded-none shadow-none placeholder:text-outline/30" maxlength="1" name="digit_4" placeholder="•" type="text">
+                <input aria-label="Digit 5" class="w-12 h-14 sm:w-14 sm:h-16 text-center font-headline-sm text-headline-sm text-primary bg-surface-container-low border-b border-outline-variant focus:border-primary focus:ring-0 focus:outline-none transition-colors duration-300 rounded-none shadow-none placeholder:text-outline/30" maxlength="1" name="digit_5" placeholder="•" type="text">
+                <input aria-label="Digit 6" class="w-12 h-14 sm:w-14 sm:h-16 text-center font-headline-sm text-headline-sm text-primary bg-surface-container-low border-b border-outline-variant focus:border-primary focus:ring-0 focus:outline-none transition-colors duration-300 rounded-none shadow-none placeholder:text-outline/30" maxlength="1" name="digit_6" placeholder="•" type="text">
+            </div>
+            <button class="w-full bg-primary text-on-primary font-ui-label text-ui-label py-4 px-8 tracking-wide hover:bg-primary-container transition-colors duration-300 flex items-center justify-center gap-2 group" type="submit">
+                <span>{% trans "Confirmer" %}</span>
+                <span class="material-symbols-outlined text-[18px] transform group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </button>
+        </form>
+        <div class="mt-8 text-center">
+            <p class="font-ui-label text-ui-label text-on-surface-variant">
+                {% trans "Vous n'avez pas reçu le code ?" %}
+                <button class="text-primary hover:text-primary-container font-medium transition-colors underline decoration-outline-variant/50 hover:decoration-primary underline-offset-4 ml-1">{% trans "Renvoyer" %}</button>
+            </p>
+        </div>
+    </div>
+    <div class="mt-8 flex justify-center gap-6 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest opacity-60">
+        <a href="#" class="hover:text-primary transition-colors">{% trans "Support" %}</a>
+        <a href="#" class="hover:text-primary transition-colors">{% trans "Privacy" %}</a>
+    </div>
+</div>
+<div aria-hidden="true" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+    <div class="absolute -top-[20%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-surface-container-low blur-[120px] opacity-60"></div>
+    <div class="absolute -bottom-[20%] -left-[10%] w-[60vw] h-[60vw] rounded-full bg-primary-fixed/20 blur-[150px] opacity-40"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const inputs = document.querySelectorAll('#otp-container input');
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < inputs.length - 1) inputs[index + 1].focus();
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) inputs[index - 1].focus();
+            });
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pastedData = e.clipboardData.getData('text').slice(0, inputs.length).replace(/[^0-9]/g, '');
+                if (pastedData) {
+                    pastedData.split('').forEach((char, i) => {
+                        if (inputs[i]) { inputs[i].value = char; if (i < inputs.length - 1) inputs[i + 1].focus(); }
+                    });
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

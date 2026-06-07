@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Boutique" %} - SekhmetKarnark{% endblock %}
+
+{% block body_class %}bg-background text-on-background antialiased selection:bg-surface-tint selection:text-white{% endblock %}
+
+{% block header %}
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-6 max-w-container-max mx-auto bg-surface/90 backdrop-blur-md transition-all duration-500 border-b-[0.5px] border-outline-variant/30">
+    <a class="font-display-lg text-[24px] md:text-headline-md text-primary dark:text-primary-fixed tracking-tight" href="{% url 'home' %}">SekhmetKarnark</a>
+    <nav class="hidden md:flex items-center gap-8">
+        <a href="{% url 'home' %}" class="font-ui-label text-ui-label text-label-caps text-on-surface-variant hover:text-secondary-container transition-colors duration-300">{% trans "Accueil" %}</a>
+        <a href="{% url 'blog:article_list' %}" class="font-ui-label text-ui-label text-label-caps text-on-surface-variant hover:text-secondary-container transition-colors duration-300">{% trans "Blog" %}</a>
+        <a href="{% url 'shop:product_list' %}" class="font-ui-label text-ui-label text-label-caps text-primary font-bold border-b-2 border-primary pb-1 Active: opacity-80 scale-95 transition-all">{% trans "Boutique" %}</a>
+        <a href="{% url 'about' %}" class="font-ui-label text-ui-label text-label-caps text-on-surface-variant hover:text-secondary-container transition-colors duration-300">{% trans "À propos" %}</a>
+        <a href="{% url 'contact:contact' %}" class="font-ui-label text-ui-label text-label-caps text-on-surface-variant hover:text-secondary-container transition-colors duration-300">{% trans "Contact" %}</a>
+    </nav>
+    <div class="flex items-center gap-4 text-primary dark:text-primary-fixed">
+        <button aria-label="language" class="hover:text-secondary-container transition-colors duration-300"><span class="material-symbols-outlined">language</span></button>
+        <a href="{% url 'accounts:login' %}" aria-label="person" class="hover:text-secondary-container transition-colors duration-300"><span class="material-symbols-outlined">person</span></a>
+        <a href="{% url 'cart:cart_detail' %}" aria-label="shopping_bag" class="hover:text-secondary-container transition-colors duration-300 relative">
+            <span class="material-symbols-outlined">shopping_bag</span>
+            <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-secondary text-[10px] text-on-secondary font-ui-label">{% if cart_item_count %}{{ cart_item_count }}{% else %}0{% endif %}</span>
+        </a>
+        <button aria-label="menu" class="md:hidden hover:text-secondary-container transition-colors duration-300"><span class="material-symbols-outlined">menu</span></button>
+    </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<main class="pt-32 pb-section-padding min-h-screen">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+        <div class="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b-[0.5px] border-outline-variant/50 pb-8">
+            <div>
+                <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-4">{% trans "L'Apothicairerie" %}</h1>
+                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">{% trans "Découvrez notre collection d'élixirs, poudres et onguents. Une sélection rigoureuse d'ingrédients botaniques pour votre équilibre naturel." %}</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="font-ui-label text-ui-label text-on-surface-variant">{% trans "Trier par :" %}</span>
+                <div class="relative">
+                    <select class="appearance-none bg-transparent border-b border-outline-variant pb-1 pr-8 font-ui-label text-ui-label text-primary focus:outline-none focus:border-primary focus:ring-0 cursor-pointer">
+                        <option>{% trans "Meilleures ventes" %}</option>
+                        <option>{% trans "Prix croissant" %}</option>
+                        <option>{% trans "Prix décroissant" %}</option>
+                        <option>{% trans "Nouveautés" %}</option>
+                    </select>
+                    <span class="material-symbols-outlined absolute right-0 top-0 pointer-events-none text-primary">arrow_drop_down</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+            <aside class="md:col-span-3 space-y-10 pr-4 md:border-r-[0.5px] border-outline-variant/30">
+                <div>
+                    <h3 class="font-label-caps text-label-caps text-primary mb-5 uppercase tracking-widest border-b-[0.5px] border-outline-variant/30 pb-2 inline-block">{% trans "Catégories" %}</h3>
+                    <ul class="space-y-3">
+                        {% for cat in categories %}
+                        <li>
+                            <label class="flex items-center gap-3 group cursor-pointer">
+                                <input class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox">
+                                <span class="font-ui-label text-ui-label text-on-surface-variant group-hover:text-primary transition-colors">{{ cat.name }} ({{ cat.product_count }})</span>
+                            </label>
+                        </li>
+                        {% empty %}
+                        <li>
+                            <label class="flex items-center gap-3 group cursor-pointer">
+                                <input class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox">
+                                <span class="font-ui-label text-ui-label text-on-surface-variant group-hover:text-primary transition-colors">{% trans "Huiles Essentielles (12)" %}</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="flex items-center gap-3 group cursor-pointer">
+                                <input checked class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox">
+                                <span class="font-ui-label text-ui-label text-primary group-hover:text-primary transition-colors">{% trans "Gélules Botaniques (8)" %}</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="flex items-center gap-3 group cursor-pointer">
+                                <input class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox">
+                                <span class="font-ui-label text-ui-label text-on-surface-variant group-hover:text-primary transition-colors">{% trans "Tisanes & Infusions (15)" %}</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="flex items-center gap-3 group cursor-pointer">
+                                <input class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox">
+                                <span class="font-ui-label text-ui-label text-on-surface-variant group-hover:text-primary transition-colors">{% trans "Élixirs Spagyriques (4)" %}</span>
+                            </label>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-label-caps text-label-caps text-primary mb-5 uppercase tracking-widest border-b-[0.5px] border-outline-variant/30 pb-2 inline-block">{% trans "Besoins" %}</h3>
+                    <ul class="space-y-3">
+                        <li><label class="flex items-center gap-3 group cursor-pointer"><input class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox"><span class="font-ui-label text-ui-label text-on-surface-variant group-hover:text-primary transition-colors">{% trans "Sommeil & Apaisement" %}</span></label></li>
+                        <li><label class="flex items-center gap-3 group cursor-pointer"><input class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox"><span class="font-ui-label text-ui-label text-on-surface-variant group-hover:text-primary transition-colors">{% trans "Immunité & Vitalité" %}</span></label></li>
+                        <li><label class="flex items-center gap-3 group cursor-pointer"><input class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox"><span class="font-ui-label text-ui-label text-on-surface-variant group-hover:text-primary transition-colors">{% trans "Digestion Légère" %}</span></label></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-label-caps text-label-caps text-primary mb-5 uppercase tracking-widest border-b-[0.5px] border-outline-variant/30 pb-2 inline-block">{% trans "Prix" %}</h3>
+                    <div class="px-1">
+                        <input class="w-full appearance-none bg-transparent" max="150" min="10" type="range" value="75">
+                        <div class="flex justify-between items-center mt-3 font-ui-label text-ui-label text-on-surface-variant">
+                            <span>10€</span>
+                            <span class="font-body-md italic text-secondary">{% trans "Jusqu'à" %} 75€</span>
+                            <span>150€</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-label-caps text-label-caps text-primary mb-5 uppercase tracking-widest border-b-[0.5px] border-outline-variant/30 pb-2 inline-block">{% trans "Disponibilité" %}</h3>
+                    <label class="flex items-center gap-3 group cursor-pointer">
+                        <div class="relative">
+                            <input checked class="sr-only" type="checkbox">
+                            <div class="block bg-surface-variant w-10 h-6 rounded-full border border-outline-variant"></div>
+                            <div class="dot absolute left-1 top-1 bg-surface-tint w-4 h-4 rounded-full transition transform translate-x-4"></div>
+                        </div>
+                        <span class="font-ui-label text-ui-label text-on-surface-variant">{% trans "En stock uniquement" %}</span>
+                    </label>
+                </div>
+            </aside>
+
+            <section class="md:col-span-9">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+                    {% for product in products %}
+                    <div class="group flex flex-col relative">
+                        <div class="relative aspect-[4/5] mb-4 overflow-hidden bg-surface-container flex items-center justify-center">
+                            <a href="{% url 'shop:product_detail' slug=product.slug %}">
+                                {% if product.main_image %}
+                                <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="object-cover w-full h-full transform transition-transform duration-700 group-hover:scale-105">
+                                {% else %}
+                                <div class="w-full h-full bg-surface-container flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-6xl text-outline-variant">spa</span>
+                                </div>
+                                {% endif %}
+                            </a>
+                            <div class="absolute inset-0 bg-background/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                                <button class="bg-primary text-on-primary font-ui-label text-ui-label px-6 py-3 tracking-wide hover:bg-surface-tint transition-colors shadow-sm flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
+                                    {% trans "Ajouter au panier" %}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 mb-2">
+                            {% if product.category %}
+                            <span class="bg-surface-variant/50 text-on-surface-variant font-label-caps text-[10px] px-2 py-1 rounded-sm uppercase tracking-wider">{{ product.category.name }}</span>
+                            {% endif %}
+                        </div>
+                        <h2 class="font-headline-sm text-headline-sm text-primary mb-1 group-hover:text-surface-tint transition-colors">{{ product.name }}</h2>
+                        <p class="font-body-md text-body-md italic text-secondary">{{ product.price }} €</p>
+                    </div>
+                    {% empty %}
+                    <div class="col-span-full text-center py-16">
+                        <span class="material-symbols-outlined text-6xl text-outline-variant mb-4">spa</span>
+                        <p class="font-body-lg text-body-lg text-on-surface-variant">{% trans "Aucun produit trouvé." %}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% if is_paginated %}
+                <div class="mt-24 flex items-center justify-center gap-8 border-t-[0.5px] border-outline-variant/30 pt-8">
+                    {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="text-outline hover:text-primary transition-colors flex items-center gap-2 font-ui-label text-ui-label">
+                        <span class="material-symbols-outlined text-[18px]">arrow_left_alt</span> {% trans "Précédent" %}
+                    </a>
+                    {% endif %}
+                    <div class="flex gap-4 font-body-md text-body-md">
+                        {% for i in paginator.page_range %}
+                        {% if page_obj.number == i %}
+                        <span class="text-primary border-b border-primary">{{ i }}</span>
+                        {% else %}
+                        <a href="?page={{ i }}" class="text-on-surface-variant hover:text-primary transition-colors">{{ i }}</a>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="text-primary hover:text-surface-tint transition-colors flex items-center gap-2 font-ui-label text-ui-label">
+                        {% trans "Suivant" %} <span class="material-symbols-outlined text-[18px]">arrow_right_alt</span>
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </section>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        if(checkbox.closest('.relative') && checkbox.nextElementSibling && checkbox.nextElementSibling.classList.contains('bg-surface-variant')) {
+            checkbox.addEventListener('change', function() {
+                const dot = this.parentElement.querySelector('.dot');
+                const bg = this.nextElementSibling;
+                if(this.checked) {
+                    dot.classList.add('translate-x-4');
+                    bg.classList.replace('bg-surface-variant', 'bg-surface-tint');
+                } else {
+                    dot.classList.remove('translate-x-4');
+                    bg.classList.replace('bg-surface-tint', 'bg-surface-variant');
+                }
+            });
+            if(checkbox.checked) {
+                checkbox.parentElement.querySelector('.dot').classList.add('translate-x-4');
+                checkbox.nextElementSibling.classList.replace('bg-surface-variant', 'bg-surface-tint');
+            }
+        }
+    });
+</script>
+{% endblock %}

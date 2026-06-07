@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "À propos" %} - SekhmetKarnark{% endblock %}
+
+{% block content %}
+<main class="pt-32 pb-section-padding">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center">
+        <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-8">{% trans "À propos de SekhmetKarnark" %}</h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl mx-auto">
+            {% trans "SekhmetKarnark est une apothicairerie moderne dédiée à la naturopathie haut de gamme. Nous croyons que la sagesse ancienne et la science moderne peuvent coexister pour offrir des remèdes d'exception." %}
+        </p>
+    </div>
+</main>
+{% endblock %}

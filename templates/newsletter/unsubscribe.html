@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Désabonnement" %} - SekhmetKarnark{% endblock %}
+
+{% block content %}
+<main class="pt-32 pb-section-padding text-center">
+    <div class="max-w-lg mx-auto px-margin-mobile md:px-margin-desktop">
+        <span class="material-symbols-outlined text-6xl text-on-surface-variant mb-6">mail_off</span>
+        <h1 class="font-headline-md text-headline-md text-primary mb-4">{% trans "Vous êtes désabonné" %}</h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant mb-8">{% trans "Vous ne recevrez plus nos communications. Vous pouvez vous réabonner à tout moment." %}</p>
+        <a href="{% url 'home' %}" class="inline-block bg-primary text-on-primary px-8 py-4 font-label-caps text-label-caps uppercase tracking-widest">{% trans "Retour à l'accueil" %}</a>
+    </div>
+</main>
+{% endblock %}
