@@ -1,8 +1,11 @@
 [variables]
 PYTHON_VERSION = "3.12"
 
+[phases.setup]
+nixPkgs = ["python3", "gcc", "libpqxx"]
+
 [phases.install]
-cmds = ["pip install -r requirements.txt"]
+cmds = ["python3 -m ensurepip --upgrade", "python3 -m pip install -r requirements.txt"]
 
 [start]
-cmd = "gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --worker-class gthread --threads 2 --timeout 120"
+cmd = "python manage.py migrate --noinput --settings=config.settings.production && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --worker-class gthread --threads 2 --timeout 120"
