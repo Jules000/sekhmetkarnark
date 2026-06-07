@@ -7,7 +7,8 @@ python manage.py migrate --noinput --settings=config.settings.production
 echo "Collecting static files..."
 python manage.py collectstatic --noinput --settings=config.settings.production || true
 
-echo "Starting gunicorn..."
+PORT="${PORT:-${RAILWAY_TCP_APPLICATION_PORT:-8000}}"
+echo "Starting gunicorn on port $PORT..."
 exec gunicorn config.wsgi:application \
     --bind 0.0.0.0:$PORT \
     --workers 4 \
