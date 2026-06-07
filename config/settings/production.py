@@ -15,6 +15,8 @@ SECURE_HSTS_PRELOAD = True
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 WHITENOISE_AUTOREFRESH = False
 
+SILENCED_SYSTEM_CHECKS = ["ratelimit.E003", "ratelimit.W001"]
+
 if os.getenv("SENTRY_DSN"):
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
