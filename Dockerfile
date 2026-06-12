@@ -5,5 +5,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends gcc libpq-dev &
 COPY requirements/base.txt requirements/
 RUN pip install --no-cache-dir -r requirements/base.txt
 COPY . .
-RUN python manage.py collectstatic --noinput --settings=config.settings.production || true
+RUN chmod +x entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
 CMD gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --worker-class gthread --threads 2 --timeout 120 --access-logfile - --error-logfile -

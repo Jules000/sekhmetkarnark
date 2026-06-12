@@ -16,9 +16,21 @@
         <button aria-label="language" class="hover:text-secondary-container transition-colors duration-300">
             <span class="material-symbols-outlined">language</span>
         </button>
-        <a href="{% url 'accounts:login' %}" aria-label="person" class="hover:text-secondary-container transition-colors duration-300">
-            <span class="material-symbols-outlined">person</span>
+        {% if user.is_authenticated %}
+        <a href="{% url 'accounts:profile' %}" aria-label="Mon compte" class="flex flex-col items-center gap-0.5 hover:text-secondary-container transition-colors duration-300">
+            <span class="material-symbols-outlined">account_circle</span>
+            <span class="text-[9px] font-ui-label uppercase tracking-widest">{% trans "Compte" %}</span>
         </a>
+        <a href="{% url 'accounts:logout' %}" aria-label="Se déconnecter" class="flex flex-col items-center gap-0.5 hover:text-secondary-container transition-colors duration-300">
+            <span class="material-symbols-outlined">logout</span>
+            <span class="text-[9px] font-ui-label uppercase tracking-widest">{% trans "Sortir" %}</span>
+        </a>
+        {% else %}
+        <a href="{% url 'accounts:login' %}" aria-label="Se connecter" class="flex flex-col items-center gap-0.5 hover:text-secondary-container transition-colors duration-300">
+            <span class="material-symbols-outlined">login</span>
+            <span class="text-[9px] font-ui-label uppercase tracking-widest">{% trans "Connexion" %}</span>
+        </a>
+        {% endif %}
         <a href="{% url 'cart:cart_detail' %}" aria-label="shopping_bag" class="hover:text-secondary-container transition-colors duration-300 relative">
             <span class="material-symbols-outlined">shopping_bag</span>
             {% if cart_item_count %}

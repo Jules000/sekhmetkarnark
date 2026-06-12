@@ -22,3 +22,4 @@ django-csp==3.*
 whitenoise==6.*
 gunicorn==22.*
 sentry-sdk[django]==2.*
+requests==2.*

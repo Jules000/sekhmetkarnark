@@ -12,24 +12,39 @@
         </div>
         <form class="max-w-lg mx-auto space-y-8" method="POST">
             {% csrf_token %}
-            <div class="relative group">
-                <input class="block w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-on-surface font-body-md text-body-md focus:ring-0 focus:border-primary transition-colors peer placeholder-transparent" id="name" name="name" placeholder=" " required type="text">
-                <label class="absolute left-0 top-3 text-on-surface-variant font-ui-label text-ui-label transition-all peer-placeholder-shown:text-body-md peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-label-caps peer-focus:text-primary" for="name">{% trans "Nom" %}</label>
+            <div class="input-group">
+                <input class="font-body-md text-body-md text-on-surface" id="name" name="name" placeholder=" " required type="text">
+                <label class="font-ui-label text-ui-label text-on-surface-variant" for="name">{% trans "Nom" %}</label>
             </div>
-            <div class="relative group">
-                <input class="block w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-on-surface font-body-md text-body-md focus:ring-0 focus:border-primary transition-colors peer placeholder-transparent" id="email" name="email" placeholder=" " required type="email">
-                <label class="absolute left-0 top-3 text-on-surface-variant font-ui-label text-ui-label transition-all peer-placeholder-shown:text-body-md peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-label-caps peer-focus:text-primary" for="email">{% trans "Email" %}</label>
+            <div class="input-group">
+                <input class="font-body-md text-body-md text-on-surface" id="email" name="email" placeholder=" " required type="email">
+                <label class="font-ui-label text-ui-label text-on-surface-variant" for="email">{% trans "Email" %}</label>
             </div>
-            <div class="relative group">
-                <input class="block w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-on-surface font-body-md text-body-md focus:ring-0 focus:border-primary transition-colors peer placeholder-transparent" id="subject" name="subject" placeholder=" " required type="text">
-                <label class="absolute left-0 top-3 text-on-surface-variant font-ui-label text-ui-label transition-all peer-placeholder-shown:text-body-md peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-label-caps peer-focus:text-primary" for="subject">{% trans "Sujet" %}</label>
+            <div class="input-group">
+                <input class="font-body-md text-body-md text-on-surface" id="subject" name="subject" placeholder=" " required type="text">
+                <label class="font-ui-label text-ui-label text-on-surface-variant" for="subject">{% trans "Sujet" %}</label>
             </div>
-            <div class="relative group">
-                <textarea class="block w-full bg-transparent border-0 border-b border-outline-variant py-3 px-0 text-on-surface font-body-md text-body-md focus:ring-0 focus:border-primary transition-colors peer placeholder-transparent" id="message" name="message" placeholder=" " required rows="4"></textarea>
-                <label class="absolute left-0 top-3 text-on-surface-variant font-ui-label text-ui-label transition-all peer-placeholder-shown:text-body-md peer-placeholder-shown:top-3 peer-focus:-top-6 peer-focus:text-label-caps peer-focus:text-primary" for="message">{% trans "Message" %}</label>
+            <div class="input-group">
+                <textarea class="font-body-md text-body-md text-on-surface" id="message" name="message" placeholder=" " required rows="4"></textarea>
+                <label class="font-ui-label text-ui-label text-on-surface-variant" for="message">{% trans "Message" %}</label>
             </div>
             <button class="w-full bg-primary text-on-primary font-label-caps text-label-caps py-4 uppercase tracking-widest hover:bg-surface-tint transition-colors duration-300" type="submit">{% trans "Envoyer" %}</button>
         </form>
     </div>
 </main>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .input-group { position: relative; padding-top: 1.5rem; }
+    .input-group input,
+    .input-group textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #c1c8c2; padding: 0.5rem 0; color: #1d1c17; transition: border-color 0.3s ease; resize: none; }
+    .input-group input:focus,
+    .input-group textarea:focus { outline: none; border-bottom-color: #022619; box-shadow: none; }
+    .input-group label { position: absolute; left: 0; top: 2rem; color: #727974; transition: all 0.3s ease; pointer-events: none; transform: translateY(-50%); }
+    .input-group input:focus ~ label,
+    .input-group input:not(:placeholder-shown) ~ label,
+    .input-group textarea:focus ~ label,
+    .input-group textarea:not(:placeholder-shown) ~ label { top: 0.5rem; font-size: 0.75rem; color: #022619; letter-spacing: 0.05em; }
+</style>
 {% endblock %}
