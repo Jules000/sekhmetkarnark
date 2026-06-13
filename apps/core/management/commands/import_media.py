@@ -22,8 +22,29 @@ class Command(BaseCommand):
             return self._import_inline(options)
         if options.get("manifest"):
             return self._import_manifest(options["manifest"])
+        if options.get("model") and options.get("value") and options.get("path"):
+            return self._import_path(options)
         self.print_help("manage.py", "import_media")
         self.stdout.write(self.style.ERROR("Utilisez --manifest ou --model --value --path --field"))
+
+    def _import_path(self, options):
+        path = options["path"]
+        if not os.path.exists(path):
+            self.stdout.write(self.style.ERROR(f"Fichier introuvable: {path}"))
+            return
+        model = self._get_model(options["model"])
+        if not model:
+            return
+        try:
+            obj = model.objects.get(**{options.get("lookup", "slug"): options["value"]})
+        except model.DoesNotExist:
+            self.stdout.write(self.style.ERROR(f"Objet {options['lookup']}={options['value']} introuvable dans {options['model']}"))
+            return
+        field_name = options.get("field", "main_image")
+        with open(path, "rb") as f:
+            filename = os.path.basename(path)
+            getattr(obj, field_name).save(filename, ContentFile(f.read()), save=True)
+        self.stdout.write(self.style.SUCCESS(f"Image importee: {options['model']}#{obj.pk}: {path} -> {field_name}"))
 
     def _import_inline(self, options):
         model_path = options["model"]
