@@ -26,5 +26,10 @@ if password and not User.objects.filter(username=username).exists():
     print(f'Superuser \"{username}\" created successfully.')
 "
 
+echo "==> Importing media files..."
+if [ -f railway_import_images.py ]; then
+    python railway_import_images.py 2>/dev/null && echo "  → Media imported" || echo "  → Media import skipped"
+fi
+
 echo "==> Starting Gunicorn..."
 exec "$@"
