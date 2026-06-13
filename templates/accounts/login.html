@@ -10,7 +10,16 @@
 {% block footer %}{% endblock %}
 
 {% block content %}
-<div class="w-full max-w-md px-margin-mobile md:px-0">
+{% with hero=hero_login %}
+<div class="absolute inset-0 z-0">
+    {% if hero and hero.image %}
+    <div class="w-full h-full bg-cover bg-center" style="background-image: url('{{ hero.image.url }}');"></div>
+    {% endif %}
+    <div class="absolute inset-0 bg-surface/40 backdrop-blur-sm"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-surface/30"></div>
+</div>
+{% endwith %}
+<div class="relative z-10 w-full max-w-md px-margin-mobile md:px-0">
     <div class="mb-12 text-center flex flex-col items-center">
         <img src="{% static 'icons/sekhmetkarnark-logo.svg' %}" alt="SekhmetKarnark Logo" class="h-16 w-auto object-contain mb-6">
         <h1 class="font-headline-md text-headline-md text-primary tracking-tight">Welcome Back</h1>
@@ -53,12 +62,6 @@
             <a href="{% url 'accounts:register' %}" class="font-ui-label text-ui-label text-primary font-medium hover:text-primary-container transition-colors border-b border-transparent hover:border-primary pb-0.5">{% trans "Create an account" %}</a>
         </p>
     </div>
-</div>
-<div class="fixed top-0 right-0 -z-10 opacity-5 pointer-events-none w-64 h-64 overflow-hidden hidden md:block">
-    <span class="material-symbols-outlined text-[300px] text-primary" data-icon="energy_savings_leaf" style="font-variation-settings: 'FILL' 1;">energy_savings_leaf</span>
-</div>
-<div class="fixed bottom-0 left-0 -z-10 opacity-5 pointer-events-none w-64 h-64 overflow-hidden hidden md:block" style="transform: rotate(180deg);">
-    <span class="material-symbols-outlined text-[300px] text-primary" data-icon="energy_savings_leaf" style="font-variation-settings: 'FILL' 1;">energy_savings_leaf</span>
 </div>
 {% endblock %}
 

@@ -11,13 +11,22 @@
 
 {% block content %}
 <div class="w-full min-h-screen flex flex-col md:flex-row">
-    <div class="hidden md:flex md:w-5/12 lg:w-1/2 relative bg-surface-container overflow-hidden">
-        <div class="absolute inset-0 bg-black/10 z-10"></div>
+    {% with hero=hero_register %}
+    <div class="hidden md:flex md:w-5/12 lg:w-1/2 relative overflow-hidden">
+        {% if hero and hero.image %}
+        <div class="absolute inset-0 w-full h-full bg-cover bg-center" style="background-image: url('{{ hero.image.url }}');"></div>
+        {% else %}
         <div class="absolute inset-0 w-full h-full bg-surface-container"></div>
-        <div class="absolute top-margin-desktop left-margin-desktop z-20 mix-blend-multiply opacity-20">
-            <span class="material-symbols-outlined" style="font-size: 240px; font-variation-settings: 'FILL' 0;">spa</span>
+        {% endif %}
+        <div class="absolute inset-0 bg-black/20 z-10"></div>
+        {% if hero and hero.title %}
+        <div class="absolute bottom-margin-desktop left-margin-desktop right-margin-desktop z-20">
+            <h2 class="font-display-lg text-display-lg-mobile text-ivoire leading-tight">{{ hero.title|safe }}</h2>
+            {% if hero.subtitle %}<p class="font-body-lg text-body-lg text-ivoire/80 mt-4">{{ hero.subtitle }}</p>{% endif %}
         </div>
+        {% endif %}
     </div>
+    {% endwith %}
     <div class="w-full md:w-7/12 lg:w-1/2 flex flex-col items-center justify-center p-margin-mobile md:p-margin-desktop relative">
         <div class="w-full max-w-md flex flex-col items-center">
             <a class="mb-16 transform transition-transform hover:scale-105 duration-500" href="{% url 'home' %}">

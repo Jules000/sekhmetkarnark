@@ -10,6 +10,15 @@
 {% block footer %}{% endblock %}
 
 {% block content %}
+{% with hero=hero_otp_verify %}
+{% if hero and hero.image %}
+<div class="absolute inset-0 z-0">
+    <div class="w-full h-full bg-cover bg-center fixed" style="background-image: url('{{ hero.image.url }}');"></div>
+    <div class="absolute inset-0 bg-surface/40 backdrop-blur-sm"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-surface/30"></div>
+</div>
+{% endif %}
+{% endwith %}
 <div class="w-full max-w-md mx-auto relative z-10">
     <div class="mb-12 flex justify-center">
         <img src="{% static 'icons/sekhmetkarnark-logo.svg' %}" alt="SekhmetKarnark Logo" class="h-16 w-auto object-contain">

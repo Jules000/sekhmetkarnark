@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
+from django_ckeditor_5.fields import CKEditor5Field
 from imagekit.models import ProcessedImageField, ImageSpecField
 from imagekit.processors import ResizeToFit, SmartResize
 
@@ -34,7 +35,7 @@ class Article(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=250, unique=True)
     excerpt = models.TextField(max_length=500, blank=True)
-    content = models.TextField()
+    content = CKEditor5Field(config_name="default")
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name="articles"
     )

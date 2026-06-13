@@ -1,0 +1,33 @@
+{% load static i18n %}
+<aside id="cart-sidebar" class="fixed inset-y-0 right-0 w-full md:w-[450px] bg-surface dark:bg-surface-container-low shadow-2xl shadow-primary/10 border-l border-outline-variant/30 flex flex-col h-full z-[100] transform translate-x-full transition-transform duration-500 ease-out">
+    <div class="flex items-center justify-between p-8 border-b border-outline-variant/20">
+        <h2 class="font-headline-md text-headline-md text-primary tracking-tight">{% trans "Votre Panier" %}</h2>
+        <button id="cart-sidebar-close" aria-label="Fermer le panier" class="text-on-surface-variant hover:text-primary transition-colors duration-300">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300;">close</span>
+        </button>
+    </div>
+    <div id="cart-sidebar-items" class="flex-1 overflow-y-auto p-8 space-y-8 scrollbar-hide">
+        <div class="text-center py-16">
+            <span class="material-symbols-outlined text-6xl text-outline-variant mb-4">shopping_bag</span>
+            <p class="font-body-lg text-body-lg text-on-surface-variant">{% trans "Votre panier est vide" %}</p>
+            <a href="{% url 'shop:product_list' %}" class="inline-block mt-6 px-8 py-4 bg-primary text-on-primary font-ui-label text-ui-label">{% trans "Explorer la boutique" %}</a>
+        </div>
+    </div>
+    <div id="cart-sidebar-footer" class="p-8 border-t border-outline-variant/20 bg-surface-container-lowest hidden">
+        <div class="flex justify-between items-center mb-6">
+            <span class="font-ui-label text-ui-label text-on-surface-variant">{% trans "Sous-total" %}</span>
+            <span id="cart-sidebar-total" class="font-headline-sm text-headline-sm text-primary"></span>
+        </div>
+        <p class="font-ui-label text-[12px] text-on-surface-variant mb-6 text-center">{% trans "Taxes et frais de port calculés à l'étape suivante." %}</p>
+        <a href="{% url 'orders:checkout' %}" class="w-full bg-or-botanique text-on-primary py-4 px-8 font-label-caps text-label-caps uppercase tracking-widest hover:bg-opacity-90 transition-all duration-300 flex items-center justify-center gap-2">
+            {% trans "Finaliser la commande" %}
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+        </a>
+    </div>
+</aside>
+<div id="cart-sidebar-overlay" class="fixed inset-0 bg-primary/20 backdrop-blur-sm z-[90] transition-opacity duration-300 opacity-0 pointer-events-none"></div>
+
+<style>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>

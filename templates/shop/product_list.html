@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static i18n %}
+{% load static i18n currency_tags %}
 
 {% block title %}{% trans "Boutique" %} - SekhmetKarnark{% endblock %}
 
@@ -18,9 +18,9 @@
     <div class="flex items-center gap-4 text-primary dark:text-primary-fixed">
         <button aria-label="language" class="hover:text-secondary-container transition-colors duration-300"><span class="material-symbols-outlined">language</span></button>
         <a href="{% url 'accounts:login' %}" aria-label="person" class="hover:text-secondary-container transition-colors duration-300"><span class="material-symbols-outlined">person</span></a>
-        <a href="{% url 'cart:cart_detail' %}" aria-label="shopping_bag" class="hover:text-secondary-container transition-colors duration-300 relative">
+        <a href="{% url 'cart:cart_detail' %}" aria-label="shopping_bag" class="cart-icon-link hover:text-secondary-container transition-colors duration-300 relative">
             <span class="material-symbols-outlined">shopping_bag</span>
-            <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-secondary text-[10px] text-on-secondary font-ui-label">{% if cart_item_count %}{{ cart_item_count }}{% else %}0{% endif %}</span>
+            <span class="cart-count-badge absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-secondary text-[10px] text-on-secondary font-ui-label {% if not cart_item_count %}hidden{% endif %}">{{ cart_item_count|default:0 }}</span>
         </a>
         <button aria-label="menu" class="md:hidden hover:text-secondary-container transition-colors duration-300"><span class="material-symbols-outlined">menu</span></button>
     </div>
@@ -38,11 +38,11 @@
             <div class="flex items-center gap-3">
                 <span class="font-ui-label text-ui-label text-on-surface-variant">{% trans "Trier par :" %}</span>
                 <div class="relative">
-                    <select class="appearance-none bg-transparent border-b border-outline-variant pb-1 pr-8 font-ui-label text-ui-label text-primary focus:outline-none focus:border-primary focus:ring-0 cursor-pointer">
-                        <option>{% trans "Meilleures ventes" %}</option>
-                        <option>{% trans "Prix croissant" %}</option>
-                        <option>{% trans "Prix décroissant" %}</option>
-                        <option>{% trans "Nouveautés" %}</option>
+                    <select class="appearance-none bg-transparent border-b border-outline-variant pb-1 pr-8 font-ui-label text-ui-label text-primary focus:outline-none focus:border-primary focus:ring-0 cursor-pointer" onchange="window.location.href='{{ request.path }}?sort='+this.value+'{% if current_category %}&category={{ current_category }}{% endif %}{% if current_price_min %}&price_min={{ current_price_min }}{% endif %}{% if current_price_max %}&price_max={{ current_price_max }}{% endif %}{% if current_in_stock %}&in_stock=1{% endif %}'">
+                        <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>{% trans "Nouveautés" %}</option>
+                        <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>{% trans "Prix croissant" %}</option>
+                        <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>{% trans "Prix décroissant" %}</option>
+                        <option value="name" {% if current_sort == 'name' %}selected{% endif %}>{% trans "Nom" %}</option>
                     </select>
                     <span class="material-symbols-outlined absolute right-0 top-0 pointer-events-none text-primary">arrow_drop_down</span>
                 </div>
@@ -51,39 +51,15 @@
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
             <aside class="md:col-span-3 space-y-10 pr-4 md:border-r-[0.5px] border-outline-variant/30">
+                <form method="GET" action="{% url 'shop:product_list' %}" id="filter-form">
                 <div>
                     <h3 class="font-label-caps text-label-caps text-primary mb-5 uppercase tracking-widest border-b-[0.5px] border-outline-variant/30 pb-2 inline-block">{% trans "Catégories" %}</h3>
                     <ul class="space-y-3">
                         {% for cat in categories %}
                         <li>
                             <label class="flex items-center gap-3 group cursor-pointer">
-                                <input class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox">
+                                <input type="checkbox" name="category" value="{{ cat.slug }}" class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent filter-checkbox" {% if current_category == cat.slug %}checked{% endif %}>
                                 <span class="font-ui-label text-ui-label text-on-surface-variant group-hover:text-primary transition-colors">{{ cat.name }} ({{ cat.product_count }})</span>
-                            </label>
-                        </li>
-                        {% empty %}
-                        <li>
-                            <label class="flex items-center gap-3 group cursor-pointer">
-                                <input class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox">
-                                <span class="font-ui-label text-ui-label text-on-surface-variant group-hover:text-primary transition-colors">{% trans "Huiles Essentielles (12)" %}</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="flex items-center gap-3 group cursor-pointer">
-                                <input checked class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox">
-                                <span class="font-ui-label text-ui-label text-primary group-hover:text-primary transition-colors">{% trans "Gélules Botaniques (8)" %}</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="flex items-center gap-3 group cursor-pointer">
-                                <input class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox">
-                                <span class="font-ui-label text-ui-label text-on-surface-variant group-hover:text-primary transition-colors">{% trans "Tisanes & Infusions (15)" %}</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="flex items-center gap-3 group cursor-pointer">
-                                <input class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox">
-                                <span class="font-ui-label text-ui-label text-on-surface-variant group-hover:text-primary transition-colors">{% trans "Élixirs Spagyriques (4)" %}</span>
                             </label>
                         </li>
                         {% endfor %}
@@ -91,22 +67,11 @@
                 </div>
 
                 <div>
-                    <h3 class="font-label-caps text-label-caps text-primary mb-5 uppercase tracking-widest border-b-[0.5px] border-outline-variant/30 pb-2 inline-block">{% trans "Besoins" %}</h3>
-                    <ul class="space-y-3">
-                        <li><label class="flex items-center gap-3 group cursor-pointer"><input class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox"><span class="font-ui-label text-ui-label text-on-surface-variant group-hover:text-primary transition-colors">{% trans "Sommeil & Apaisement" %}</span></label></li>
-                        <li><label class="flex items-center gap-3 group cursor-pointer"><input class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox"><span class="font-ui-label text-ui-label text-on-surface-variant group-hover:text-primary transition-colors">{% trans "Immunité & Vitalité" %}</span></label></li>
-                        <li><label class="flex items-center gap-3 group cursor-pointer"><input class="form-checkbox text-surface-tint border-outline rounded-sm focus:ring-surface-tint bg-transparent" type="checkbox"><span class="font-ui-label text-ui-label text-on-surface-variant group-hover:text-primary transition-colors">{% trans "Digestion Légère" %}</span></label></li>
-                    </ul>
-                </div>
-
-                <div>
                     <h3 class="font-label-caps text-label-caps text-primary mb-5 uppercase tracking-widest border-b-[0.5px] border-outline-variant/30 pb-2 inline-block">{% trans "Prix" %}</h3>
                     <div class="px-1">
-                        <input class="w-full appearance-none bg-transparent" max="150" min="10" type="range" value="75">
-                        <div class="flex justify-between items-center mt-3 font-ui-label text-ui-label text-on-surface-variant">
-                            <span>10€</span>
-                            <span class="font-body-md italic text-secondary">{% trans "Jusqu'à" %} 75€</span>
-                            <span>150€</span>
+                        <div class="flex gap-2">
+                            <input type="number" name="price_min" placeholder="Min" value="{{ current_price_min }}" class="w-1/2 bg-transparent border-b border-outline-variant text-ui-label font-ui-label text-on-surface-variant focus:border-primary focus:ring-0 p-1">
+                            <input type="number" name="price_max" placeholder="Max" value="{{ current_price_max }}" class="w-1/2 bg-transparent border-b border-outline-variant text-ui-label font-ui-label text-on-surface-variant focus:border-primary focus:ring-0 p-1">
                         </div>
                     </div>
                 </div>
@@ -115,43 +80,52 @@
                     <h3 class="font-label-caps text-label-caps text-primary mb-5 uppercase tracking-widest border-b-[0.5px] border-outline-variant/30 pb-2 inline-block">{% trans "Disponibilité" %}</h3>
                     <label class="flex items-center gap-3 group cursor-pointer">
                         <div class="relative">
-                            <input checked class="sr-only" type="checkbox">
-                            <div class="block bg-surface-variant w-10 h-6 rounded-full border border-outline-variant"></div>
-                            <div class="dot absolute left-1 top-1 bg-surface-tint w-4 h-4 rounded-full transition transform translate-x-4"></div>
+                            <input type="checkbox" name="in_stock" value="1" class="sr-only filter-checkbox" {% if current_in_stock %}checked{% endif %}>
+                            <div class="block bg-surface-variant w-10 h-6 rounded-full border border-outline-variant toggle-bg"></div>
+                            <div class="dot absolute left-1 top-1 bg-surface-tint w-4 h-4 rounded-full transition toggle-dot {% if current_in_stock %}translate-x-4{% endif %}"></div>
                         </div>
                         <span class="font-ui-label text-ui-label text-on-surface-variant">{% trans "En stock uniquement" %}</span>
                     </label>
                 </div>
+
+                <input type="hidden" name="sort" value="{{ current_sort }}">
+                <button type="submit" class="w-full bg-primary text-on-primary font-ui-label text-ui-label py-3 px-4 tracking-wide hover:bg-surface-tint transition-colors">{% trans "Appliquer les filtres" %}</button>
+                <a href="{% url 'shop:product_list' %}" class="block w-full text-center font-ui-label text-ui-label text-on-surface-variant hover:text-primary transition-colors py-2">{% trans "Réinitialiser" %}</a>
+                </form>
             </aside>
 
             <section class="md:col-span-9">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
                     {% for product in products %}
                     <div class="group flex flex-col relative">
-                        <div class="relative aspect-[4/5] mb-4 overflow-hidden bg-surface-container flex items-center justify-center">
-                            <a href="{% url 'shop:product_detail' slug=product.slug %}">
-                                {% if product.main_image %}
-                                <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="object-cover w-full h-full transform transition-transform duration-700 group-hover:scale-105">
-                                {% else %}
-                                <div class="w-full h-full bg-surface-container flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-6xl text-outline-variant">spa</span>
-                                </div>
-                                {% endif %}
-                            </a>
-                            <div class="absolute inset-0 bg-background/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-                                <button class="bg-primary text-on-primary font-ui-label text-ui-label px-6 py-3 tracking-wide hover:bg-surface-tint transition-colors shadow-sm flex items-center gap-2">
+                        <a href="{% url 'shop:product_detail' slug=product.slug %}" class="block relative aspect-[4/5] mb-4 overflow-hidden bg-surface-container flex items-center justify-center">
+                            {% if product.main_image %}
+                            <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="object-cover w-full h-full transform transition-transform duration-700 group-hover:scale-105">
+                            {% else %}
+                            <div class="w-full h-full bg-surface-container flex items-center justify-center">
+                                <span class="material-symbols-outlined text-6xl text-outline-variant">spa</span>
+                            </div>
+                            {% endif %}
+                        </a>
+                        <div class="relative">
+                            <form action="{% url 'cart:cart_add' product.id %}" method="POST" class="add-to-cart-form absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6 z-10">
+                                {% csrf_token %}
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="bg-primary text-on-primary font-ui-label text-ui-label px-6 py-3 tracking-wide hover:bg-surface-tint transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
                                     <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
                                     {% trans "Ajouter au panier" %}
                                 </button>
-                            </div>
+                            </form>
                         </div>
                         <div class="flex gap-2 mb-2">
                             {% if product.category %}
                             <span class="bg-surface-variant/50 text-on-surface-variant font-label-caps text-[10px] px-2 py-1 rounded-sm uppercase tracking-wider">{{ product.category.name }}</span>
                             {% endif %}
                         </div>
-                        <h2 class="font-headline-sm text-headline-sm text-primary mb-1 group-hover:text-surface-tint transition-colors">{{ product.name }}</h2>
-                        <p class="font-body-md text-body-md italic text-secondary">{{ product.price }} €</p>
+                        <a href="{% url 'shop:product_detail' slug=product.slug %}" class="block">
+                            <h2 class="font-headline-sm text-headline-sm text-primary mb-1 group-hover:text-surface-tint transition-colors">{{ product.name }}</h2>
+                        </a>
+                        <p class="font-body-md text-body-md italic text-secondary">{{ product.price|fcfa }}</p>
                     </div>
                     {% empty %}
                     <div class="col-span-full text-center py-16">
@@ -192,23 +166,25 @@
 
 {% block extra_js %}
 <script>
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        if(checkbox.closest('.relative') && checkbox.nextElementSibling && checkbox.nextElementSibling.classList.contains('bg-surface-variant')) {
-            checkbox.addEventListener('change', function() {
-                const dot = this.parentElement.querySelector('.dot');
-                const bg = this.nextElementSibling;
-                if(this.checked) {
+    document.querySelectorAll('.filter-checkbox').forEach(function(cb) {
+        cb.addEventListener('change', function() {
+            var dot = this.parentElement.querySelector('.toggle-dot');
+            var bg = this.parentElement.querySelector('.toggle-bg');
+            if (dot && bg) {
+                if (this.checked) {
                     dot.classList.add('translate-x-4');
                     bg.classList.replace('bg-surface-variant', 'bg-surface-tint');
                 } else {
                     dot.classList.remove('translate-x-4');
                     bg.classList.replace('bg-surface-tint', 'bg-surface-variant');
                 }
-            });
-            if(checkbox.checked) {
-                checkbox.parentElement.querySelector('.dot').classList.add('translate-x-4');
-                checkbox.nextElementSibling.classList.replace('bg-surface-variant', 'bg-surface-tint');
             }
+        });
+        var dot = cb.parentElement.querySelector('.toggle-dot');
+        var bg = cb.parentElement.querySelector('.toggle-bg');
+        if (cb.checked && dot && bg) {
+            dot.classList.add('translate-x-4');
+            bg.classList.replace('bg-surface-variant', 'bg-surface-tint');
         }
     });
 </script>

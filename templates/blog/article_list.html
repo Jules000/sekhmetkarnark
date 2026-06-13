@@ -18,7 +18,7 @@
     <div class="flex items-center gap-4 text-primary dark:text-primary-fixed">
         <button class="hover:opacity-80 scale-95 transition-all"><span class="material-symbols-outlined" data-icon="language">language</span></button>
         <a href="{% url 'accounts:login' %}" class="hover:opacity-80 scale-95 transition-all"><span class="material-symbols-outlined" data-icon="person">person</span></a>
-        <a href="{% url 'cart:cart_detail' %}" class="hover:opacity-80 scale-95 transition-all"><span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span></a>
+        <a href="{% url 'cart:cart_detail' %}" class="cart-icon-link hover:opacity-80 scale-95 transition-all relative"><span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span><span class="cart-count-badge absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-secondary text-[10px] text-on-secondary font-ui-label {% if not cart_item_count %}hidden{% endif %}">{{ cart_item_count|default:0 }}</span></a>
     </div>
 </nav>
 {% endblock %}
@@ -33,16 +33,16 @@
     <section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto mb-16 border-b-[0.5px] border-outline-variant/50 pb-8 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
         <div class="flex flex-wrap gap-3">
             <span class="font-label-caps text-label-caps text-on-surface-variant py-2">{% trans "Filtres :" %}</span>
-            <button class="px-4 py-2 rounded-full border-[0.5px] border-primary text-primary font-ui-label text-ui-label bg-primary/5 hover:bg-primary/10 transition-colors">{% trans "Tous" %}</button>
-            <button class="px-4 py-2 rounded-full border-[0.5px] border-outline-variant text-on-surface-variant font-ui-label text-ui-label hover:border-primary transition-colors">{% trans "Immunité" %}</button>
-            <button class="px-4 py-2 rounded-full border-[0.5px] border-outline-variant text-on-surface-variant font-ui-label text-ui-label hover:border-primary transition-colors">{% trans "Digestion" %}</button>
-            <button class="px-4 py-2 rounded-full border-[0.5px] border-outline-variant text-on-surface-variant font-ui-label text-ui-label hover:border-primary transition-colors">{% trans "Système Nerveux" %}</button>
+            <a href="{% url 'blog:article_list' %}" class="px-4 py-2 rounded-full border-[0.5px] {% if not current_category %}border-primary text-primary bg-primary/5{% else %}border-outline-variant text-on-surface-variant{% endif %} font-ui-label text-ui-label hover:border-primary transition-colors">{% trans "Tous" %}</a>
+            {% for cat in categories_blog %}
+            <a href="{% url 'blog:article_list' %}?category={{ cat.slug }}{% if current_sort %}&sort={{ current_sort }}{% endif %}" class="px-4 py-2 rounded-full border-[0.5px] {% if current_category == cat.slug %}border-primary text-primary bg-primary/5{% else %}border-outline-variant text-on-surface-variant{% endif %} font-ui-label text-ui-label hover:border-primary transition-colors">{{ cat.name }}</a>
+            {% endfor %}
         </div>
         <div class="flex gap-4 items-center">
             <span class="font-label-caps text-label-caps text-on-surface-variant">{% trans "Trier par :" %}</span>
-            <select class="bg-transparent border-none text-primary font-ui-label text-ui-label cursor-pointer focus:ring-0 p-0">
-                <option>{% trans "Plus récents" %}</option>
-                <option>{% trans "Temps de lecture" %}</option>
+            <select class="bg-transparent border-none text-primary font-ui-label text-ui-label cursor-pointer focus:ring-0 p-0" onchange="window.location.href='{{ request.path }}?{% if current_category %}category={{ current_category }}&{% endif %}sort='+this.value">
+                <option value="recent" {% if current_sort == 'recent' %}selected{% endif %}>{% trans "Plus récents" %}</option>
+                <option value="reading_time" {% if current_sort == 'reading_time' %}selected{% endif %}>{% trans "Temps de lecture" %}</option>
             </select>
         </div>
     </section>
@@ -50,7 +50,7 @@
     <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-gutter">
         <div class="lg:col-span-8 flex flex-col gap-16">
             {% for article in featured_articles %}
-            <article class="group cursor-pointer">
+            <a href="{% url 'blog:article_detail' slug=article.slug %}" class="block group">
                 <div class="w-full h-[400px] overflow-hidden rounded-DEFAULT bg-surface-container mb-6 relative">
                     {% if article.featured_image %}
                     <img src="{{ article.featured_image.url }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
@@ -70,7 +70,7 @@
                 </div>
                 <h2 class="font-headline-md text-headline-md text-primary mb-4 group-hover:text-surface-tint transition-colors">{{ article.title }}</h2>
                 <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">{{ article.excerpt }}</p>
-            </article>
+            </a>
             {% empty %}
             <article class="group cursor-pointer">
                 <div class="w-full h-[400px] overflow-hidden rounded-DEFAULT bg-surface-container mb-6 relative">
@@ -91,7 +91,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {% for article in secondary_articles %}
-                <article class="group cursor-pointer">
+                <a href="{% url 'blog:article_detail' slug=article.slug %}" class="block group">
                     <div class="w-full h-[240px] overflow-hidden rounded-DEFAULT bg-surface-container mb-4">
                         {% if article.featured_image %}
                         <img src="{{ article.featured_image.url }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
@@ -105,7 +105,7 @@
                     <div class="flex items-center gap-3 text-on-surface-variant font-ui-label text-ui-[12px]">
                         <span>{{ article.reading_time }} min {% trans "de lecture" %}</span>
                     </div>
-                </article>
+                </a>
                 {% empty %}
                 <article class="group cursor-pointer">
                     <div class="w-full h-[240px] overflow-hidden rounded-DEFAULT bg-surface-container mb-4">
@@ -149,12 +149,12 @@
                 <h4 class="font-label-caps text-label-caps text-on-surface-variant tracking-widest mb-6 border-b-[0.5px] border-outline-variant/30 pb-2">{% trans "LES PLUS LUS" %}</h4>
                 <ol class="flex flex-col gap-6 counter-reset-articles">
                     {% for popular in popular_articles %}
-                    <li class="flex gap-4 group cursor-pointer relative" style="counter-increment: articles;">
+                    <li class="flex gap-4 group relative" style="counter-increment: articles;">
                         <span class="font-display-lg text-headline-sm text-outline/20 font-bold before:content-[counter(articles)]"></span>
-                        <div>
+                        <a href="{% url 'blog:article_detail' slug=popular.slug %}" class="block">
                             <h5 class="font-headline-sm text-[20px] text-primary group-hover:text-surface-tint transition-colors leading-tight mb-2">{{ popular.title }}</h5>
                             <span class="font-ui-label text-ui-[12px] text-on-surface-variant">{{ popular.category.name|default:"Naturopathie" }}</span>
-                        </div>
+                        </a>
                     </li>
                     {% empty %}
                     <li class="flex gap-4 group cursor-pointer relative" style="counter-increment: articles;">

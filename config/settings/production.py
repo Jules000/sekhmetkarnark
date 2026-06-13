@@ -2,6 +2,16 @@ from .base import *
 
 DEBUG = False
 
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").replace(" ", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
+railway_url = os.getenv("RAILWAY_PUBLIC_DOMAIN", "")
+if railway_url:
+    ALLOWED_HOSTS.append(railway_url)
+    ALLOWED_HOSTS.append(f"https://{railway_url}")
+
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if os.getenv("CSRF_TRUSTED_ORIGINS") else []
+if railway_url:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{railway_url}")
+
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = True

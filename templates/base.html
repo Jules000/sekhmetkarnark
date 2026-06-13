@@ -145,7 +145,129 @@
         {% include 'partials/_footer.html' %}
     {% endblock %}
     
+    {% include 'partials/_cart_sidebar.html' %}
+    
     <script src="{% static 'vendors/tailwind/tailwind.min.js' %}?plugins=forms,container-queries"></script>
+    <script>
+    function getCSRFToken() {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var c = cookies[i].trim();
+            if (c.indexOf('csrftoken=') === 0) return c.substring(10);
+        }
+        return '';
+    }
+    var csrfToken = getCSRFToken();
+    function openCartSidebar() { document.getElementById('cart-sidebar').classList.remove('translate-x-full'); document.getElementById('cart-sidebar-overlay').classList.remove('opacity-0', 'pointer-events-none'); document.body.style.overflow = 'hidden'; }
+    function closeCartSidebar() { document.getElementById('cart-sidebar').classList.add('translate-x-full'); document.getElementById('cart-sidebar-overlay').classList.add('opacity-0', 'pointer-events-none'); document.body.style.overflow = ''; }
+    
+    function refreshCart() {
+        fetch('{% url "cart:cart_data" %}', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(function(r) { return r.json(); })
+        .then(function(data) { renderCartItems(data.items, data.cart_total, data.suggested); });
+    }
+    
+    function renderCartItems(items, total, suggested) {
+        var container = document.getElementById('cart-sidebar-items');
+        var footer = document.getElementById('cart-sidebar-footer');
+        var totalEl = document.getElementById('cart-sidebar-total');
+        var badge = document.querySelector('.cart-count-badge');
+        if (!container) return;
+        if (!items || items.length === 0) {
+            container.innerHTML = '<div class="text-center py-16"><span class="material-symbols-outlined text-6xl text-outline-variant mb-4">shopping_bag</span><p class="font-body-lg text-body-lg text-on-surface-variant">Votre panier est vide</p><a href="/boutique/" class="inline-block mt-6 px-8 py-4 bg-primary text-on-primary font-ui-label text-ui-label">Explorer la boutique</a></div>';
+            if (footer) footer.classList.add('hidden');
+            if (badge) { badge.textContent = '0'; badge.classList.add('hidden'); }
+            return;
+        }
+        var html = '';
+        items.forEach(function(item) {
+            var img = item.image_url ? '<img src="' + item.image_url + '" alt="' + item.name + '" class="absolute inset-0 w-full h-full object-cover">' : '<div class="absolute inset-0 flex items-center justify-center"><span class="material-symbols-outlined text-3xl text-outline-variant">spa</span></div>';
+            html += '<div class="flex gap-4 items-start group" data-item-id="' + item.id + '"><div class="w-20 h-24 bg-surface-variant/50 relative overflow-hidden flex-shrink-0">' + img + '</div><div class="flex-1 flex flex-col justify-between py-0.5"><div class="flex justify-between items-start"><div><h3 class="font-body-md text-body-md text-primary leading-tight">' + item.name + '</h3><p class="font-ui-label text-ui-label text-on-surface-variant mt-0.5 text-[12px]">' + (item.category || '') + '</p></div><button class="remove-item text-outline hover:text-error transition-colors" data-item-id="' + item.id + '" aria-label="Supprimer"><span class="material-symbols-outlined text-[18px]">delete</span></button></div><div class="flex justify-between items-center mt-2"><div class="flex items-center border border-outline-variant/50 rounded-sm"><button class="qty-down px-2 py-0.5 text-on-surface-variant hover:text-primary transition-colors text-[14px] leading-none" data-item-id="' + item.id + '">−</button><span class="font-ui-label text-ui-label text-primary w-8 text-center text-[13px]">' + item.quantity + '</span><button class="qty-up px-2 py-0.5 text-on-surface-variant hover:text-primary transition-colors text-[14px] leading-none" data-item-id="' + item.id + '">+</button></div><span class="font-body-md text-body-md text-primary">' + item.total + ' FCFA</span></div></div></div><div class="h-px w-full bg-outline-variant/20 max-w-[80%] mx-auto"></div>';
+        });
+        // Suggested products
+        if (suggested && suggested.length > 0) {
+            html += '<div class="pt-6"><h3 class="font-headline-sm text-[16px] text-primary mb-4 tracking-tight">Vous aimerez aussi</h3><div class="space-y-3">';
+            suggested.forEach(function(p) {
+                var img = p.image_url ? '<img src="' + p.image_url + '" alt="' + p.name + '" class="w-full h-full object-cover">' : '<div class="w-full h-full flex items-center justify-center"><span class="material-symbols-outlined text-lg text-outline-variant">spa</span></div>';
+                html += '<div class="flex items-center gap-3 group"><div class="w-12 h-12 bg-surface-variant/50 overflow-hidden flex-shrink-0">' + img + '</div><div class="flex-1 min-w-0"><h4 class="font-ui-label text-ui-label text-primary truncate">' + p.name + '</h4><p class="font-ui-label text-[12px] text-on-surface-variant">' + p.price + ' FCFA</p></div><button class="add-suggested text-primary hover:text-secondary-fixed-dim transition-colors" data-product-id="' + p.id + '"><span class="material-symbols-outlined text-[18px]">add_circle</span></button></div>';
+            });
+            html += '</div></div>';
+        }
+        container.innerHTML = html;
+        if (footer) { footer.classList.remove('hidden'); totalEl.textContent = total + ' FCFA'; }
+        if (badge) {
+            var count = items.reduce(function(s, i) { return s + (parseInt(i.quantity) || 0); }, 0);
+            badge.textContent = count; badge.classList.remove('hidden');
+        }
+        // Bind events
+        container.querySelectorAll('.qty-up').forEach(function(btn) {
+            btn.addEventListener('click', function() { updateItem(this.dataset.itemId, 1); });
+        });
+        container.querySelectorAll('.qty-down').forEach(function(btn) {
+            btn.addEventListener('click', function() { updateItem(this.dataset.itemId, -1); });
+        });
+        container.querySelectorAll('.remove-item').forEach(function(btn) {
+            btn.addEventListener('click', function() { removeItem(this.dataset.itemId); });
+        });
+        container.querySelectorAll('.add-suggested').forEach(function(btn) {
+            btn.addEventListener('click', function() { addToCart(this.dataset.productId, 1); });
+        });
+    }
+    
+    function updateItem(itemId, delta) {
+        var container = document.getElementById('cart-sidebar-items');
+        var itemEl = container.querySelector('[data-item-id="' + itemId + '"]');
+        var qtyEl = itemEl ? itemEl.querySelector('.qty-down + span') : null;
+        var current = qtyEl ? parseInt(qtyEl.textContent) : 1;
+        var newQty = Math.max(0, current + delta);
+        if (newQty === 0) { removeItem(itemId); return; }
+        var form = new FormData(); form.append('quantity', newQty); form.append('csrfmiddlewaretoken', csrfToken);
+        fetch('{% url "cart:cart_update" 999999 %}'.replace('999999', itemId), { method: 'POST', body: form, headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': csrfToken } })
+        .then(function(r) { return r.json(); })
+        .then(function(data) { if (data.success) renderCartItems(data.items, data.cart_total, data.suggested); });
+    }
+    
+    function removeItem(itemId) {
+        var form = new FormData(); form.append('csrfmiddlewaretoken', csrfToken);
+        fetch('{% url "cart:cart_remove" 999999 %}'.replace('999999', itemId), { method: 'POST', body: form, headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': csrfToken } })
+        .then(function(r) { return r.json(); })
+        .then(function(data) { if (data.success) renderCartItems(data.items, data.cart_total, data.suggested); });
+    }
+    
+    function addToCart(productId, qty) {
+        var form = new FormData(); form.append('quantity', qty); form.append('csrfmiddlewaretoken', csrfToken);
+        fetch('{% url "cart:cart_add" 999999 %}'.replace('999999', productId), { method: 'POST', body: form, headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': csrfToken } })
+        .then(function(r) { return r.json(); })
+        .then(function(data) { if (data.success) renderCartItems(data.items, data.cart_total, data.suggested); });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        var closeBtn = document.getElementById('cart-sidebar-close');
+        if (closeBtn) closeBtn.addEventListener('click', closeCartSidebar);
+        document.getElementById('cart-sidebar-overlay').addEventListener('click', closeCartSidebar);
+        
+        document.querySelectorAll('.add-to-cart-form').forEach(function(form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var btn = form.querySelector('button[type="submit"]');
+                var orig = btn ? btn.innerHTML : '';
+                if (btn) btn.innerHTML = '...';
+                fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (data.success) { renderCartItems(data.items, data.cart_total, data.suggested); openCartSidebar(); }
+                    if (btn) btn.innerHTML = orig;
+                }).catch(function() { if (btn) btn.innerHTML = orig; });
+            });
+        });
+        
+        document.querySelectorAll('.cart-icon-link').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); refreshCart(); openCartSidebar();
+            });
+        });
+    });
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

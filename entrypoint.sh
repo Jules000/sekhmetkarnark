@@ -7,6 +7,9 @@ python manage.py migrate --noinput
 echo "==> Collecting static files..."
 python manage.py collectstatic --noinput --clear
 
+echo "==> Seeding initial data..."
+python manage.py seed_data --noinput 2>/dev/null || echo "  → Seed data skipped (already exists or not needed)"
+
 echo "==> Creating superuser (if DJANGO_SUPERUSER_PASSWORD is set)..."
 python -c "
 import os

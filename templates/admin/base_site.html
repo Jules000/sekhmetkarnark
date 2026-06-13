@@ -1,0 +1,27 @@
+{% extends "admin/base.html" %}
+{% load static i18n %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | SekhmetKarnark Admin{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <img src="{% static 'icons/sekhmetkarnark-logo.svg' %}" alt="SekhmetKarnark" width="32" height="32" style="vertical-align: middle; margin-right: 8px;">
+        SekhmetKarnark
+    </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block footer %}
+<div id="footer" style="text-align: center; padding: 10px; color: #727974; font-size: 12px; font-family: 'Jost', sans-serif;">
+    SekhmetKarnark &copy; {% now "Y" %}
+</div>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Libre+Caslon+Text:ital@0;1&family=Literata:ital@0;1&display=swap" rel="stylesheet">
+{% endblock %}

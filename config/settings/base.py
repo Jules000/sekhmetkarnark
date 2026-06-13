@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
     # Third-party
+    "jazzmin",
     "django_redis",
     "imagekit",
     "modeltranslation",
@@ -205,6 +206,127 @@ else:
 CACHE_MIDDLEWARE_ALIAS = "default"
 CACHE_MIDDLEWARE_SECONDS = 300
 CACHE_MIDDLEWARE_KEY_PREFIX = "sk"
+
+JAZZMIN_SETTINGS = {
+    "site_title": "SekhmetKarnark Admin",
+    "site_header": "SekhmetKarnark",
+    "site_brand": "SekhmetKarnark",
+    "site_logo": "icons/sekhmetkarnark-logo.svg",
+    "site_logo_classes": "img-circle",
+    "site_icon": "icons/sekhmetkarnark-logo.svg",
+    "welcome_sign": "Bienvenue dans l'administration SekhmetKarnark",
+    "copyright": "SekhmetKarnark ©",
+    "search_model": ["accounts.User", "shop.Product", "blog.Article"],
+    "user_avatar": None,
+    "topmenu_links": [
+        {"name": "Accueil", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Voir le site", "url": "/", "new_window": True},
+    ],
+    "usermenu_links": [
+        {"name": "Voir le site", "url": "/", "new_window": True},
+    ],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+    "order_with_respect_to": [
+        "core",
+        "shop",
+        "blog",
+        "orders",
+        "payments",
+        "accounts",
+        "contact",
+        "newsletter",
+        "cart",
+        "seo",
+        "auth",
+    ],
+    "custom_links": {},
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.User": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "accounts.User": "fas fa-user-circle",
+        "core.HeroSlide": "fas fa-images",
+        "shop.Product": "fas fa-cube",
+        "shop.Category": "fas fa-tags",
+        "blog.Article": "fas fa-newspaper",
+        "blog.Category": "fas fa-tag",
+        "blog.Tag": "fas fa-hashtag",
+        "orders.Order": "fas fa-shopping-cart",
+        "orders.OrderItem": "fas fa-box",
+        "payments.TranzakTransaction": "fas fa-credit-card",
+        "contact.ContactMessage": "fas fa-envelope",
+        "newsletter.Subscriber": "fas fa-bell",
+        "cart.Cart": "fas fa-shopping-bag",
+        "cart.CartItem": "fas fa-box-open",
+    },
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    "related_modal_active": True,
+    "custom_css": "css/admin.css",
+    "custom_js": None,
+    "show_ui_builder": True,
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {
+        "auth.User": "collapsible",
+        "accounts.User": "collapsible",
+    },
+    "language_chooser": True,
+}
+
+CKEDITOR_5_CONFIGS = {
+    "default": {
+        "language": {"ui": "fr", "content": "fr"},
+        "toolbar": [
+            "heading", "|",
+            "bold", "italic", "underline", "strikethrough", "subscript", "superscript", "|",
+            "fontColor", "fontBackgroundColor", "fontSize", "fontFamily", "|",
+            "alignment", "|",
+            "bulletedList", "numberedList", "|",
+            "outdent", "indent", "|",
+            "blockQuote", "link", "imageUpload", "mediaEmbed", "insertTable", "|",
+            "undo", "redo", "|",
+            "sourceEditing", "removeFormat", "|",
+            "specialCharacters", "horizontalLine", "pageBreak",
+        ],
+        "image": {
+            "toolbar": [
+                "imageTextAlternative", "imageStyle:inline",
+                "imageStyle:block", "imageStyle:side",
+                "linkImage",
+            ],
+        },
+        "table": {
+            "contentToolbar": [
+                "tableColumn", "tableRow", "mergeTableCells",
+                "tableCellProperties", "tableProperties",
+            ],
+        },
+        "heading": {
+            "options": [
+                {"model": "paragraph", "title": "Paragraph", "class": "ck-heading_paragraph"},
+                {"model": "heading1", "view": "h1", "title": "Heading 1", "class": "ck-heading_heading1"},
+                {"model": "heading2", "view": "h2", "title": "Heading 2", "class": "ck-heading_heading2"},
+                {"model": "heading3", "view": "h3", "title": "Heading 3", "class": "ck-heading_heading3"},
+                {"model": "heading4", "view": "h4", "title": "Heading 4", "class": "ck-heading_heading4"},
+            ],
+        },
+        "list": {
+            "properties": {"styles": True, "startIndex": True, "reversed": True},
+        },
+    },
+    "minimal": {
+        "language": {"ui": "fr", "content": "fr"},
+        "toolbar": [
+            "bold", "italic", "link", "bulletedList", "numberedList", "undo", "redo",
+        ],
+    },
+}
+
+CKEDITOR_5_FILE_STORAGE = "django_ckeditor_5.storage.CKEditor5Storage"
+CKEDITOR_5_CUSTOM_CSS = "css/admin.css"
 
 CACHE_TTL = {
     "homepage": 60 * 15,
