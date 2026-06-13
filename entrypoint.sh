@@ -26,12 +26,8 @@ if password and not User.objects.filter(username=username).exists():
 echo "==> Seeding initial data..."
 python manage.py seed_data 2>/dev/null || echo "  → Seed skipped"
 
-echo "==> Importing product images..."
-python manage.py import_media --model shop.Product --field main_image --lookup slug --value neroli-imperial --path /app/media/shop/products/2026/06/mareefe-cosmetic-oil-3164684_1920.webp 2>&1 || true
-python manage.py import_media --model shop.Product --field main_image --lookup slug --value ashwagandha-sombre --path /app/media/shop/products/2026/06/monicore-essential-oils-1851027_1920.webp 2>&1 || true
-python manage.py import_media --model shop.Product --field main_image --lookup slug --value moringa-solaire --path /app/media/shop/products/2026/06/ninetechno-herbal-tea-7111625_1920.webp 2>&1 || true
-python manage.py import_media --model shop.Product --field main_image --lookup slug --value songe-dosiris --path /app/media/shop/products/2026/06/nutriscanapp-moringa-9872407_1920.webp 2>&1 || true
-python manage.py import_media --model shop.Product --field main_image --lookup slug --value quintessence-dhematite --path /app/media/shop/products/2026/06/u_ocknzmxfrt-essential-oils-8373959_1920.webp 2>&1 || true
+echo "==> Importing images from GitHub..."
+python manage.py import_images_url 2>&1 || echo "  → Image import skipped (will retry on next deploy)"
 
 echo "==> Starting Gunicorn..."
 exec "$@"
